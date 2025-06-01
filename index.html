@@ -81,7 +81,7 @@
             text-align: center;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-        #username-input, #password-input {
+        #password-input {
             padding: 0.5rem;
             border: 1px solid #e2e8f0;
             border-radius: 0.375rem;
@@ -112,11 +112,10 @@
     <div id="password-overlay">
         <div id="password-modal">
             <h2 class="text-2xl font-bold mb-4">Access Restricted</h2>
-            <p>Please enter your credentials to access the content.</p>
-            <input type="text" id="username-input" placeholder="Teacher's Name">
+            <p>Please enter the password to access the content.</p>
             <input type="password" id="password-input" placeholder="Password">
             <button id="password-submit">Submit</button>
-            <p id="password-error">Incorrect Teacher's Name or Password. Please try again.</p>
+            <p id="password-error">Incorrect Password. Please try again.</p>
         </div>
     </div>
 
@@ -171,6 +170,26 @@
                         </p>
                     </section>
 
+                    <section class="bg-blue-50 p-6 rounded-xl shadow-sm border border-blue-100">
+                        <h3 class="text-2xl font-semibold text-blue-800 mb-4 flex items-center">
+                            <span class="w-8 h-8 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center mr-3">📝</span>
+                            Assessment: Chapter One Assignment
+                        </h3>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            All tutors need to submit an audio assignment in response to one of the 3 debatable questions.
+                            Assessment will be done after we review your answers, and scoring will be on the basis of originality and language skills, and how close you have reviewed the chapter.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Please give priority to the questions that have no or little attention by other peers.
+                        </p>
+                        <p class="text-red-600 font-semibold mb-4">
+                            Deadline for assignment submission for Chapter One assessment is: 04/06/2025
+                        </p>
+                        <a href="https://padlet.com/ishakinsa/chapter-01-assessement-7n5uajtvt92urwx1" target="_blank" class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
+                            Go to Assignment Link
+                        </a>
+                        <p class="text-gray-800 font-semibold mt-4">Best of luck; <br>Ishak ZERDAZI</p>
+                    </section>
                     <section class="locked-section p-6 rounded-xl">
                         <h3 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center">
                             <span class="w-8 h-8 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center mr-3">3</span>
@@ -223,9 +242,7 @@
     </div>
 
     <script>
-        const correctUsername = "IRIS Tutor";
-        const correctPassword = "IRIS-DZ-2025";
-        const usernameInput = document.getElementById('username-input');
+        const correctPassword = "IRIS-DZ-2025"; // Single password
         const passwordInput = document.getElementById('password-input');
         const passwordSubmit = document.getElementById('password-submit');
         const passwordOverlay = document.getElementById('password-overlay');
@@ -234,7 +251,7 @@
         const contentCards = document.querySelectorAll('.content-card');
 
         passwordSubmit.addEventListener('click', () => {
-            if (usernameInput.value === correctUsername && passwordInput.value === correctPassword) {
+            if (passwordInput.value === correctPassword) {
                 passwordOverlay.style.display = 'none';
                 mainContent.classList.remove('hidden');
             } else {
