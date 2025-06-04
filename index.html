@@ -143,6 +143,26 @@
             height: 1px;
             background: linear-gradient(to right, transparent, #cbd5e1, transparent);
         }
+        .announcement-banner {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -172,6 +192,28 @@
         </header>
 
         <main class="w-full max-w-5xl bg-white shadow-lg rounded-xl overflow-hidden mb-16">
+            <!-- Important Announcement Banner -->
+            <div class="announcement-banner mx-6 mt-6">
+                <div class="flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <h3 class="font-bold text-lg">Important Announcement</h3>
+                </div>
+                <p class="mt-2 text-center">
+                    Our video hosting is temporarily suspended. Please use this 
+                    <a href="https://drive.google.com/drive/folders/1j92-a2SEE5v5htwMQR47w0FpTF-OFrOi?usp=drive_link" 
+                       target="_blank" 
+                       class="font-bold underline hover:text-yellow-200 transition-colors">
+                        alternative Google Drive link
+                    </a> 
+                    to access the course videos.
+                </p>
+                <p class="mt-1 text-sm text-yellow-100 text-center">
+                    We apologize for the inconvenience and appreciate your understanding.
+                </p>
+            </div>
+
             <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-6 sm:p-8 text-white">
                 <h2 class="text-2xl sm:text-3xl font-bold mb-2">Foundations of Language Teaching Methodology</h2>
                 <p class="text-blue-100 leading-relaxed">
@@ -179,6 +221,7 @@
                 </p>
             </div>
             
+            <!-- Rest of the content remains the same -->
             <div class="p-6 sm:p-8 lg:p-10">
                 <!-- Chapter 1 -->
                 <div class="chapter-header">
