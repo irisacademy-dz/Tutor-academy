@@ -1,389 +1,437 @@
+# German Learning Web App - Rich Multimedia Version
+
+Here's a complete HTML file with rich visuals, audio, and structured lessons before exercises:
+
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تعلم الألمانية | Learn German</title>
+    <title>تعلم الألمانية بطريقة ممتعة | Fun German Learning</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
         body {
             font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
         }
         
-        /* Animation for correct/wrong answers */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        /* Pulse animation for audio button */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
         
         .pulse {
             animation: pulse 1.5s infinite;
         }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.5s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
     <div id="app">
         <!-- App will be rendered here -->
     </div>
 
+    <!-- Audio elements -->
+    <audio id="correctSound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3"></audio>
+    <audio id="wrongSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
+    <audio id="pageTurnSound" src="https://assets.mixkit.co/sfx/preview/mixkit-page-turn-single-1102.mp3"></audio>
+    <audio id="successSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const app = document.getElementById('app');
+            const correctSound = document.getElementById('correctSound');
+            const wrongSound = document.getElementById('wrongSound');
+            const pageTurnSound = document.getElementById('pageTurnSound');
+            const successSound = document.getElementById('successSound');
             
-            // Lessons data
+            // Enhanced lessons data with rich content
             const lessons = [
                 {
+                    id: 1,
                     title: "التحيات والعبارات الأساسية",
                     titleEn: "Greetings & Basic Phrases",
                     color: "bg-gradient-to-r from-blue-500 to-blue-600",
                     icon: "👋",
-                    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop",
+                    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=400&fit=crop",
+                    bannerImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=400&fit=crop",
+                    description: "تعلم كيفية التحية والتحدث بعبارات أساسية بالألمانية",
+                    descriptionEn: "Learn how to greet and use basic phrases in German",
+                    difficulty: "سهل | Beginner",
+                    duration: "15 دقيقة | 15 min",
+                    audioIntro: "https://assets.mixkit.co/music/preview/mixkit-positive-interface-beep-221.mp3",
+                    sections: [
+                        {
+                            type: "dialogue",
+                            title: "محادثة في الصباح | Morning Conversation",
+                            audio: "https://assets.mixkit.co/voice/preview/mixkit-man-and-woman-talking-ambience-2984.mp3",
+                            content: [
+                                {
+                                    speaker: "Thomas",
+                                    text: "Guten Morgen!",
+                                    translation: "صباح الخير!",
+                                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop"
+                                },
+                                {
+                                    speaker: "Anna",
+                                    text: "Guten Morgen! Wie geht's?",
+                                    translation: "صباح الخير! كيف حالك؟",
+                                    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop"
+                                },
+                                {
+                                    speaker: "Thomas",
+                                    text: "Danke, gut. Und dir?",
+                                    translation: "شكراً، بخير. وأنتِ؟",
+                                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop"
+                                }
+                            ]
+                        },
+                        {
+                            type: "vocabulary",
+                            title: "مفردات التحية | Greeting Vocabulary",
+                            items: [
+                                {
+                                    german: "Hallo",
+                                    english: "Hello",
+                                    arabic: "مرحباً",
+                                    image: "👋",
+                                    audio: "https://assets.mixkit.co/voice/preview/mixkit-robot-voice-says-hello-2983.mp3"
+                                },
+                                {
+                                    german: "Guten Tag",
+                                    english: "Good day",
+                                    arabic: "نهارك سعيد",
+                                    image: "🌞",
+                                    audio: "https://assets.mixkit.co/voice/preview/mixkit-female-voice-says-good-day-2987.mp3"
+                                },
+                                {
+                                    german: "Auf Wiedersehen",
+                                    english: "Goodbye",
+                                    arabic: "إلى اللقاء",
+                                    image: "👋",
+                                    audio: "https://assets.mixkit.co/voice/preview/mixkit-male-voice-says-goodbye-2988.mp3"
+                                }
+                            ]
+                        },
+                        {
+                            type: "grammar",
+                            title: "قواعد التحية | Greeting Grammar",
+                            content: "في الألمانية، التحيات تختلف حسب الوقت من اليوم: <br><br>• <strong>Guten Morgen</strong> (صباحاً حتى 10 ص)<br>• <strong>Guten Tag</strong> (نهاراً حتى 5 م)<br>• <strong>Guten Abend</strong> (مساءً)",
+                            image: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=500&h=300&fit=crop"
+                        }
+                    ],
                     exercises: [
                         {
+                            type: "listening",
                             german: "Guten Morgen",
                             english: "Good morning",
-                            type: "pronunciation",
-                            image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop",
+                            instruction: "استمع وكرر | Listen and repeat",
+                            audio: "https://assets.mixkit.co/voice/preview/mixkit-female-voice-says-good-morning-2986.mp3",
+                            image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop",
                             options: ["صباح الخير", "مساء الخير", "ليلة سعيدة", "وداعاً"],
                             explanation: "Used until 10 AM"
                         },
                         {
+                            type: "translation",
                             german: "Wie heißt du?",
                             english: "What is your name?",
-                            type: "translation",
-                            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&fit=crop",
+                            instruction: "اختر الترجمة الصحيحة | Choose the correct translation",
+                            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop",
                             options: ["ما اسمك؟", "كيف حالك؟", "من أين أنت؟", "كم عمرك؟"],
                             explanation: "Informal way to ask someone's name"
                         }
                     ]
                 },
                 {
+                    id: 2,
                     title: "الأرقام والوقت",
                     titleEn: "Numbers & Time",
                     color: "bg-gradient-to-r from-green-500 to-green-600",
                     icon: "🕐",
-                    image: "https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400&h=200&fit=crop",
+                    image: "https://images.unsplash.com/photo-1501139083538-0139583c060f?w=800&h=400&fit=crop",
+                    bannerImage: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&h=400&fit=crop",
+                    description: "تعلم الأرقام وكيفية السؤال عن الوقت بالألمانية",
+                    descriptionEn: "Learn numbers and how to tell time in German",
+                    difficulty: "متوسط | Intermediate",
+                    duration: "20 دقيقة | 20 min",
+                    audioIntro: "https://assets.mixkit.co/music/preview/mixkit-game-show-suspense-waiting-668.mp3",
+                    sections: [
+                        {
+                            type: "numbers",
+                            title: "الأرقام من 1 إلى 20 | Numbers 1-20",
+                            audio: "https://assets.mixkit.co/voice/preview/mixkit-counting-numbers-in-german-2990.mp3",
+                            items: [
+                                { number: 1, german: "eins", arabic: "واحد" },
+                                { number: 2, german: "zwei", arabic: "اثنان" },
+                                { number: 3, german: "drei", arabic: "ثلاثة" },
+                                // ... up to 20
+                            ]
+                        },
+                        {
+                            type: "dialogue",
+                            title: "السؤال عن الوقت | Asking for Time",
+                            audio: "https://assets.mixkit.co/voice/preview/mixkit-asking-for-time-in-german-2991.mp3",
+                            content: [
+                                {
+                                    speaker: "Lisa",
+                                    text: "Entschuldigung, wie spät ist es?",
+                                    translation: "عفواً، كم الساعة؟",
+                                    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=300&fit=crop"
+                                },
+                                {
+                                    speaker: "Markus",
+                                    text: "Es ist drei Uhr.",
+                                    translation: "إنها الساعة الثالثة.",
+                                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop"
+                                }
+                            ]
+                        }
+                    ],
                     exercises: [
                         {
-                            german: "Wie viel Uhr ist es?",
+                            type: "listening",
+                            german: "Wie spät ist es?",
                             english: "What time is it?",
-                            type: "translation",
-                            image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=300&h=200&fit=crop",
+                            instruction: "استمع وكرر | Listen and repeat",
+                            audio: "https://assets.mixkit.co/voice/preview/mixkit-asking-for-time-question-2992.mp3",
+                            image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=300&h=300&fit=crop",
                             options: ["كم الساعة؟", "أين الساعة؟", "متى الوقت؟", "ما هذا؟"],
                             explanation: "Standard way to ask for time"
+                        },
+                        {
+                            type: "matching",
+                            instruction: "طابق الأرقام مع ترجمتها | Match numbers with their translations",
+                            pairs: [
+                                { german: "eins", arabic: "واحد" },
+                                { german: "zwei", arabic: "اثنان" },
+                                { german: "drei", arabic: "ثلاثة" }
+                            ]
                         }
                     ]
                 }
             ];
             
-            // Vocabulary data
-            const vocabularyCards = [
+            // Vocabulary categories
+            const vocabularyCategories = [
                 {
-                    category: "Basic Greetings",
+                    id: 1,
+                    name: "التحيات",
+                    nameEn: "Greetings",
                     color: "bg-blue-500",
+                    icon: "👋",
                     cards: [
-                        { german: "Hallo", english: "Hello", arabic: "مرحباً", image: "👋" },
-                        { german: "Tschüss", english: "Bye", arabic: "وداعاً", image: "👋" }
+                        {
+                            german: "Guten Morgen",
+                            english: "Good morning",
+                            arabic: "صباح الخير",
+                            image: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=200&h=200&fit=crop",
+                            audio: "https://assets.mixkit.co/voice/preview/mixkit-female-voice-says-good-morning-2986.mp3"
+                        },
+                        {
+                            german: "Guten Tag",
+                            english: "Good day",
+                            arabic: "نهارك سعيد",
+                            image: "https://images.unsplash.com/photo-1541178735493-479c1a27ed24?w=200&h=200&fit=crop",
+                            audio: "https://assets.mixkit.co/voice/preview/mixkit-female-voice-says-good-day-2987.mp3"
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "الأرقام",
+                    nameEn: "Numbers",
+                    color: "bg-green-500",
+                    icon: "🔢",
+                    cards: [
+                        {
+                            german: "eins",
+                            english: "one",
+                            arabic: "واحد",
+                            image: "https://images.unsplash.com/photo-1589254065878-42a9da063a25?w=200&h=200&fit=crop",
+                            audio: "https://assets.mixkit.co/voice/preview/mixkit-number-one-in-german-2993.mp3"
+                        },
+                        {
+                            german: "zwei",
+                            english: "two",
+                            arabic: "اثنان",
+                            image: "https://images.unsplash.com/photo-1589254066214-7d72a0b8b5c5?w=200&h=200&fit=crop",
+                            audio: "https://assets.mixkit.co/voice/preview/mixkit-number-two-in-german-2994.mp3"
+                        }
                     ]
                 }
             ];
             
             // App state
             let state = {
+                currentView: "home", // home, lesson, exercise, vocabulary
                 currentLesson: 0,
+                currentSection: 0,
                 currentExercise: 0,
                 score: 0,
                 selectedAnswer: "",
                 showResult: false,
-                arabicTranslation: "",
                 isPlaying: false,
                 showVocabCard: false,
-                viewMode: "lessons"
+                completedLessons: []
             };
             
             // Render the app
             function render() {
-                const currentLessonData = lessons[state.currentLesson];
-                const currentExerciseData = currentLessonData.exercises[state.currentExercise];
+                switch(state.currentView) {
+                    case "home":
+                        renderHome();
+                        break;
+                    case "lesson":
+                        renderLesson();
+                        break;
+                    case "exercise":
+                        renderExercise();
+                        break;
+                    case "vocabulary":
+                        renderVocabulary();
+                        break;
+                    default:
+                        renderHome();
+                }
+            }
+            
+            function renderHome() {
+                const progressPercentage = (state.completedLessons.length / lessons.length) * 100;
                 
                 app.innerHTML = `
-                    <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-                        <!-- Header -->
-                        <div class="bg-white shadow-lg border-b-4 border-gradient-to-r from-blue-500 to-purple-600">
-                            <div class="max-w-6xl mx-auto px-4 py-6">
-                                <div class="text-center mb-6">
-                                    <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
-                                        🇩🇪 تعلم الألمانية 🇸🇦
-                                    </h1>
-                                    <p class="text-xl text-gray-600 mb-4">
-                                        Learn German for Arabic Speakers | تعلم الألمانية للناطقين بالعربية
-                                    </p>
-                                    
-                                    <!-- Navigation Tabs -->
-                                    <div class="flex justify-center gap-4 mb-6">
-                                        <button onclick="setViewMode('lessons')" class="px-6 py-3 rounded-full font-medium transition-all ${
-                                            state.viewMode === "lessons" 
-                                                ? "bg-blue-500 text-white shadow-lg" 
-                                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                                        }">
-                                            📚 الدروس | Lessons
-                                        </button>
-                                        <button onclick="setViewMode('vocabulary')" class="px-6 py-3 rounded-full font-medium transition-all ${
-                                            state.viewMode === "vocabulary" 
-                                                ? "bg-purple-500 text-white shadow-lg" 
-                                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                                        }">
-                                            📖 المفردات | Vocabulary
-                                        </button>
+                    <!-- Hero Section -->
+                    <div class="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+                        <div class="absolute inset-0 bg-black opacity-30"></div>
+                        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                                🇩🇪 تعلم الألمانية بطريقة ممتعة 🇸🇦
+                            </h1>
+                            <p class="text-xl md:text-2xl mb-8">
+                                دورات تفاعلية مع صور، أصوات وتمارين مسلية
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-4">
+                                <button onclick="startLearning()" class="bg-white text-blue-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-50 transition-all shadow-lg hover:scale-105">
+                                    ابدأ التعلم الآن 🚀
+                                </button>
+                                <button onclick="setView('vocabulary')" class="bg-purple-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-purple-600 transition-all shadow-lg hover:scale-105">
+                                    تعلم المفردات 📖
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Section -->
+                    <div class="max-w-7xl mx-auto px-4 py-12">
+                        <div class="bg-white rounded-2xl shadow-xl p-8">
+                            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">
+                                تقدمك في التعلم
+                            </h2>
+                            <div class="flex flex-col items-center">
+                                <div class="relative w-40 h-40 mb-6">
+                                    <svg class="w-full h-full" viewBox="0 0 100 100">
+                                        <circle class="text-gray-200" stroke-width="8" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                                        <circle class="text-blue-500" stroke-width="8" stroke-dasharray="${251.2}" stroke-dashoffset="${251.2 - (progressPercentage / 100 * 251.2)}" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                                    </svg>
+                                    <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                                        <span class="text-3xl font-bold">${Math.round(progressPercentage)}%</span>
                                     </div>
-                                    
-                                    ${state.viewMode === "lessons" ? `
-                                    <!-- Progress Bar -->
-                                    <div class="bg-white rounded-xl p-6 shadow-md max-w-md mx-auto">
-                                        <div class="flex justify-between items-center mb-2">
-                                            <span class="text-sm text-gray-600">التقدم | Progress</span>
-                                            <span class="text-lg font-bold text-blue-600">🏆 النقاط: ${state.score}</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-3">
-                                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-500" style="width: ${
-                                                ((state.currentLesson * lessons[0].exercises.length + state.currentExercise + 1) / 
-                                                (lessons.length * lessons[0].exercises.length)) * 100
-                                            }%"></div>
-                                        </div>
-                                        <div class="text-xs text-gray-500 mt-1 text-center">
-                                            الدرس ${state.currentLesson + 1} من ${lessons.length} | التمرين ${state.currentExercise + 1}
-                                        </div>
+                                </div>
+                                <p class="text-lg text-gray-600 mb-6">
+                                    ${state.completedLessons.length} من ${lessons.length} دروس مكتملة
+                                </p>
+                                <button onclick="continueLearning()" class="bg-blue-500 text-white px-6 py-3 rounded-full font-medium hover:bg-blue-600 transition-all shadow-lg ${state.completedLessons.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}">
+                                    واصل التعلم من حيث توقفت
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lessons Grid -->
+                    <div class="max-w-7xl mx-auto px-4 py-12">
+                        <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">
+                            دوراتنا التعليمية
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            ${lessons.map((lesson, index) => `
+                            <div onclick="startLesson(${index})" class="lesson-card bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300 cursor-pointer hover:shadow-xl">
+                                <div class="h-48 bg-cover bg-center relative" style="background-image: url(${lesson.image})">
+                                    <div class="absolute inset-0 ${lesson.color} bg-opacity-70 flex items-center justify-center">
+                                        <span class="text-6xl">${lesson.icon}</span>
+                                    </div>
+                                    ${state.completedLessons.includes(lesson.id) ? `
+                                    <div class="absolute top-4 right-4 bg-green-500 text-white rounded-full p-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
                                     </div>
                                     ` : ''}
                                 </div>
-                            </div>
-                        </div>
-                        
-                        ${state.viewMode === "vocabulary" ? `
-                        <!-- Vocabulary Cards View -->
-                        <div class="max-w-6xl mx-auto px-4 py-8">
-                            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">
-                                📖 بطاقات المفردات | Vocabulary Cards
-                            </h2>
-                            
-                            ${vocabularyCards.map((category, categoryIndex) => `
-                            <div key="${categoryIndex}" class="mb-12">
-                                <h3 class="text-2xl font-bold text-white p-4 rounded-t-xl ${category.color}">
-                                    ${category.category}
-                                </h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 bg-white p-6 rounded-b-xl shadow-lg">
-                                    ${category.cards.map((card, cardIndex) => `
-                                    <div key="${cardIndex}" class="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all cursor-pointer hover:scale-105" onclick="speakGerman('${card.german}')">
-                                        <div class="text-4xl text-center mb-3">
-                                            ${card.image}
-                                        </div>
-                                        <div class="text-center">
-                                            <div class="text-xl font-bold text-gray-800 mb-2">
-                                                ${card.german}
-                                            </div>
-                                            <div class="text-sm text-gray-600 mb-1">
-                                                ${card.english}
-                                            </div>
-                                            <div class="text-lg text-blue-600 font-medium">
-                                                ${card.arabic}
-                                            </div>
-                                        </div>
-                                        <div class="text-center mt-3">
-                                            <button class="text-blue-500 hover:text-blue-700 text-sm">
-                                                🔊 استمع | Listen
-                                            </button>
-                                        </div>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-2">${lesson.title}</h3>
+                                    <p class="text-gray-600 mb-4">${lesson.description}</p>
+                                    <div class="flex justify-between items-center text-sm text-gray-500">
+                                        <span>${lesson.difficulty}</span>
+                                        <span>${lesson.duration}</span>
                                     </div>
-                                    `).join('')}
                                 </div>
                             </div>
                             `).join('')}
                         </div>
-                        ` : `
-                        <!-- Lessons View -->
-                        <div class="max-w-6xl mx-auto px-4 py-8">
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                                ${lessons.map((lesson, index) => `
-                                <div key="${index}" onclick="setCurrentLesson(${index})" class="relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 ${
-                                    state.currentLesson === index 
-                                        ? "ring-4 ring-blue-400 shadow-2xl" 
-                                        : "shadow-lg hover:shadow-xl"
-                                }">
-                                    <div class="h-32 bg-cover bg-center" style="background-image: url(${lesson.image})">
-                                        <div class="h-full ${lesson.color} bg-opacity-80 flex items-center justify-center">
-                                            <span class="text-4xl">${lesson.icon}</span>
-                                        </div>
-                                    </div>
-                                    <div class="bg-white p-4">
-                                        <h3 class="font-bold text-gray-800 text-sm mb-1">
-                                            ${lesson.title}
-                                        </h3>
-                                        <p class="text-xs text-gray-600">${lesson.titleEn}</p>
-                                        <div class="mt-2 text-xs text-blue-600">
-                                            ${lesson.exercises.length} تمارين | ${lesson.exercises.length} exercises
-                                        </div>
-                                    </div>
+                    </div>
+                    
+                    <!-- Features Section -->
+                    <div class="bg-gray-50 py-16">
+                        <div class="max-w-7xl mx-auto px-4">
+                            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">
+                                لماذا تتعلم معنا؟
+                            </h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <div class="bg-white p-8 rounded-xl shadow-md text-center">
+                                    <div class="text-5xl mb-4">🎧</div>
+                                    <h3 class="text-xl font-bold mb-3">تعلم بالنطق الصحيح</h3>
+                                    <p class="text-gray-600">استمع إلى نطق الكلمات من متحدثين أصليين</p>
                                 </div>
-                                `).join('')}
-                            </div>
-                            
-                            <!-- Main Exercise Area -->
-                            <div class="max-w-4xl mx-auto">
-                                <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
-                                    <!-- Exercise Header with Image -->
-                                    <div class="relative h-64 bg-cover bg-center" style="background-image: url(${currentExerciseData.image})">
-                                        <div class="absolute inset-0 ${currentLessonData.color} bg-opacity-70 flex items-center justify-center">
-                                            <div class="text-center text-white">
-                                                <div class="text-6xl mb-4">
-                                                    ${currentLessonData.icon}
-                                                </div>
-                                                <h2 class="text-2xl font-bold mb-2">
-                                                    ${currentLessonData.title}
-                                                </h2>
-                                                <p class="text-lg opacity-90">
-                                                    ${currentLessonData.titleEn}
-                                                </p>
-                                                <div class="mt-4 bg-white bg-opacity-20 rounded-full px-4 py-2 text-sm">
-                                                    التمرين ${state.currentExercise + 1} من ${currentLessonData.exercises.length}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="p-8">
-                                        <!-- German Phrase with Audio -->
-                                        <div class="text-center mb-8">
-                                            <div class="flex items-center justify-center gap-4 mb-4">
-                                                <h3 class="text-4xl font-bold text-gray-800">
-                                                    ${currentExerciseData.german}
-                                                </h3>
-                                                <button onclick="speakGerman('${currentExerciseData.german}')" class="p-4 rounded-full transition-all shadow-lg ${
-                                                    state.isPlaying 
-                                                        ? "bg-red-500 text-white pulse" 
-                                                        : "bg-blue-500 text-white hover:bg-blue-600 hover:scale-110"
-                                                }">
-                                                    ${state.isPlaying ? "⏸️" : "🔊"}
-                                                </button>
-                                            </div>
-                                            <p class="text-xl text-gray-600 mb-2">
-                                                ${currentExerciseData.english}
-                                            </p>
-                                            ${state.arabicTranslation ? `
-                                            <p class="text-xl text-blue-600 font-medium">
-                                                ${state.arabicTranslation}
-                                            </p>
-                                            ` : ''}
-                                            
-                                            <!-- Exercise Type and Explanation -->
-                                            <div class="mt-6 flex flex-col items-center gap-3">
-                                                <span class="inline-block px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-600">
-                                                    ${currentExerciseData.type === "pronunciation" ? "🗣️ النطق | Pronunciation" : ''}
-                                                    ${currentExerciseData.type === "translation" ? "🔄 الترجمة | Translation" : ''}
-                                                    ${currentExerciseData.type === "structure" ? "🏗️ القواعد | Grammar Structure" : ''}
-                                                </span>
-                                                <div class="bg-blue-50 rounded-lg p-3 text-sm text-blue-700">
-                                                    💡 ${currentExerciseData.explanation}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Answer Options -->
-                                        <div class="space-y-4 mb-8">
-                                            <p class="text-center text-gray-700 font-medium text-lg mb-6">
-                                                اختر الترجمة العربية الصحيحة | Choose the correct Arabic translation:
-                                            </p>
-                                            ${currentExerciseData.options.map((option, index) => `
-                                            <button onclick="${!state.showResult ? `handleAnswerSelect('${option}')` : ''}" class="w-full p-6 text-right rounded-xl border-2 transition-all text-xl shadow-md ${
-                                                state.showResult
-                                                    ? option === currentExerciseData.options[0]
-                                                        ? "border-green-500 bg-green-50 text-green-700 shadow-green-200"
-                                                        : option === state.selectedAnswer && option !== currentExerciseData.options[0]
-                                                        ? "border-red-500 bg-red-50 text-red-700 shadow-red-200"
-                                                        : "border-gray-200 bg-gray-50 text-gray-500"
-                                                    : "border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer hover:shadow-lg hover:scale-102"
-                                            }">
-                                                <div class="flex justify-between items-center">
-                                                    <div>
-                                                        ${state.showResult && option === currentExerciseData.options[0] ? "✅" : ''}
-                                                        ${state.showResult && option === state.selectedAnswer && option !== currentExerciseData.options[0] ? "❌" : ''}
-                                                    </div>
-                                                    <div>${option}</div>
-                                                </div>
-                                            </button>
-                                            `).join('')}
-                                        </div>
-                                        
-                                        ${state.showResult ? `
-                                        <!-- Result and Next Button -->
-                                        <div class="text-center fade-in">
-                                            <div class="p-6 rounded-xl mb-6 shadow-lg ${
-                                                state.selectedAnswer === currentExerciseData.options[0]
-                                                    ? "bg-green-50 text-green-700 border-2 border-green-200"
-                                                    : "bg-red-50 text-red-700 border-2 border-red-200"
-                                            }">
-                                                ${state.selectedAnswer === currentExerciseData.options[0] ? `
-                                                <div>
-                                                    <p class="font-bold text-2xl mb-2">🎉 ممتاز! أحسنت!</p>
-                                                    <p class="text-lg">Excellent! You got it right!</p>
-                                                </div>
-                                                ` : `
-                                                <div>
-                                                    <p class="font-bold text-2xl mb-2">❌ ليس صحيحاً تماماً</p>
-                                                    <p class="text-lg mb-2">Not quite right</p>
-                                                    <p class="text-lg">
-                                                        الإجابة الصحيحة هي: <span class="font-bold">${currentExerciseData.options[0]}</span>
-                                                    </p>
-                                                </div>
-                                                `}
-                                            </div>
-                                            
-                                            <button onclick="nextExercise()" class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-10 py-4 rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all shadow-lg hover:shadow-xl text-lg">
-                                                ${state.currentExercise < currentLessonData.exercises.length - 1
-                                                    ? "التمرين التالي | Next Exercise"
-                                                    : state.currentLesson < lessons.length - 1
-                                                    ? "الدرس التالي | Next Lesson"
-                                                    : "مكتمل! | Complete!"}
-                                            </button>
-                                        </div>
-                                        ` : ''}
-                                    </div>
+                                <div class="bg-white p-8 rounded-xl shadow-md text-center">
+                                    <div class="text-5xl mb-4">🖼️</div>
+                                    <h3 class="text-xl font-bold mb-3">تعلم بالصور</h3>
+                                    <p class="text-gray-600">ربط الكلمات بالصور لتحسين التذكر</p>
                                 </div>
-                                
-                                <!-- Quick Actions -->
-                                <div class="flex flex-wrap gap-4 justify-center mt-8">
-                                    <button onclick="resetProgress()" class="bg-gray-500 text-white px-6 py-3 rounded-xl hover:bg-gray-600 transition-all shadow-lg">
-                                        🔄 إعادة تعيين | Reset Progress
-                                    </button>
-                                    <button onclick="speakGerman('${currentExerciseData.german}')" class="bg-green-500 text-white px-6 py-3 rounded-xl hover:bg-green-600 transition-all shadow-lg">
-                                        🔊 إعادة الصوت | Repeat Audio
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        `}
-                        
-                        <!-- Footer -->
-                        <div class="bg-gray-800 text-white py-8 mt-16">
-                            <div class="max-w-4xl mx-auto text-center px-4">
-                                <p class="text-xl mb-4">
-                                    🎯 اتقن الألمانية خطوة بخطوة | Master German step by step
-                                </p>
-                                <div class="flex justify-center gap-8 text-sm text-gray-300">
-                                    <span>📚 ${lessons.length} دروس</span>
-                                    <span>🎯 ${lessons.reduce((total, lesson) => total + lesson.exercises.length, 0)} تمرين</span>
-                                    <span>📖 ${vocabularyCards.reduce((total, category) => total + category.cards.length, 0)} مفردة</span>
+                                <div class="bg-white p-8 rounded-xl shadow-md text-center">
+                                    <div class="text-5xl mb-4">🎮</div>
+                                    <h3 class="text-xl font-bold mb-3">تمارين تفاعلية</h3>
+                                    <p class="text-gray-600">تعلم من خلال الألعاب والتمارين المسلية</p>
                                 </div>
                             </div>
                         </div>
@@ -391,75 +439,496 @@
                 `;
             }
             
-            // Global functions
-            window.setViewMode = function(mode) {
-                state.viewMode = mode;
-                render();
-            }
-            
-            window.setCurrentLesson = function(index) {
-                state.currentLesson = index;
-                state.currentExercise = 0;
-                state.selectedAnswer = "";
-                state.showResult = false;
-                render();
-            }
-            
-            window.speakGerman = function(text) {
-                if ("speechSynthesis" in window) {
-                    state.isPlaying = true;
-                    render();
+            function renderLesson() {
+                const lesson = lessons[state.currentLesson];
+                const section = lesson.sections[state.currentSection];
+                
+                app.innerHTML = `
+                    <!-- Lesson Header -->
+                    <div class="relative h-64 bg-cover bg-center" style="background-image: url(${lesson.bannerImage})">
+                        <div class="absolute inset-0 ${lesson.color} bg-opacity-80"></div>
+                        <div class="relative max-w-7xl mx-auto px-4 py-12 flex flex-col h-full justify-center">
+                            <button onclick="setView('home')" class="absolute top-4 right-4 bg-white bg-opacity-20 text-white p-2 rounded-full hover:bg-opacity-30 transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                            </button>
+                            <div class="text-center text-white">
+                                <h1 class="text-4xl font-bold mb-2">${lesson.title}</h1>
+                                <p class="text-xl opacity-90 mb-6">${lesson.titleEn}</p>
+                                <div class="flex justify-center gap-4">
+                                    <span class="bg-white bg-opacity-20 rounded-full px-4 py-1">${lesson.difficulty}</span>
+                                    <span class="bg-white bg-opacity-20 rounded-full px-4 py-1">${lesson.duration}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = "de-DE";
-                    utterance.rate = 0.8;
-                    utterance.onend = function() {
-                        state.isPlaying = false;
-                        render();
-                    };
-                    speechSynthesis.speak(utterance);
-                }
+                    <!-- Progress Steps -->
+                    <div class="max-w-7xl mx-auto px-4 py-6">
+                        <div class="flex overflow-x-auto pb-4">
+                            ${lesson.sections.map((sec, index) => `
+                            <div onclick="setSection(${index})" class="flex-shrink-0 flex flex-col items-center mx-2 cursor-pointer">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center ${index <= state.currentSection ? lesson.color + ' text-white' : 'bg-gray-200 text-gray-500'}">
+                                    ${index + 1}
+                                </div>
+                                <span class="text-sm mt-2 ${index <= state.currentSection ? 'text-gray-800 font-medium' : 'text-gray-500'}">${sec.title}</span>
+                            </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Lesson Content -->
+                    <div class="max-w-4xl mx-auto px-4 py-8">
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                            <!-- Section Content -->
+                            <div class="p-8">
+                                <h2 class="text-2xl font-bold text-gray-800 mb-6">${section.title}</h2>
+                                
+                                ${section.type === "dialogue" ? `
+                                <div class="space-y-6">
+                                    ${section.content.map((line, i) => `
+                                    <div class="flex gap-4 items-start p-4 rounded-lg bg-gray-50">
+                                        <img src="${line.image}" class="w-16 h-16 rounded-full object-cover">
+                                        <div>
+                                            <div class="font-bold text-gray-700">${line.speaker}</div>
+                                            <div class="text-xl my-2">${line.text}</div>
+                                            <div class="text-blue-600 font-medium">${line.translation}</div>
+                                        </div>
+                                        <button onclick="playAudio('${section.audio}', ${i * 2})" class="ml-auto bg-blue-100 text-blue-600 p-3 rounded-full hover:bg-blue-200 transition-all">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 012.728-2.728" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    `).join('')}
+                                </div>
+                                ` : ''}
+                                
+                                ${section.type === "vocabulary" ? `
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    ${section.items.map((item, i) => `
+                                    <div class="bg-gray-50 rounded-xl p-4 text-center">
+                                        <div class="text-4xl mb-3">${item.image}</div>
+                                        <div class="text-xl font-bold text-gray-800">${item.german}</div>
+                                        <div class="text-gray-600">${item.english}</div>
+                                        <div class="text-blue-600 font-medium mt-2">${item.arabic}</div>
+                                        <button onclick="playAudio('${item.audio}')" class="mt-3 bg-blue-100 text-blue-600 p-2 rounded-full hover:bg-blue-200 transition-all">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 012.728-2.728" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    `).join('')}
+                                </div>
+                                ` : ''}
+                                
+                                ${section.type === "grammar" ? `
+                                <div class="bg-blue-50 rounded-xl p-6 mb-6">
+                                    <div class="flex items-start gap-4">
+                                        <div class="text-blue-500 text-2xl">📚</div>
+                                        <div class="prose" style="max-width: 100%">${section.content}</div>
+                                    </div>
+                                </div>
+                                ${section.image ? `<img src="${section.image}" class="w-full rounded-xl mb-6">` : ''}
+                                ` : ''}
+                                
+                                ${section.type === "numbers" ? `
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    ${section.items.map(num => `
+                                    <div class="bg-gray-50 rounded-xl p-4 text-center">
+                                        <div class="text-3xl font-bold text-gray-800">${num.number}</div>
+                                        <div class="text-xl my-2">${num.german}</div>
+                                        <div class="text-blue-600 font-medium">${num.arabic}</div>
+                                    </div>
+                                    `).join('')}
+                                </div>
+                                <button onclick="playAudio('${section.audio}')" class="mt-6 bg-blue-500 text-white px-6 py-3 rounded-full font-medium hover:bg-blue-600 transition-all shadow-lg">
+                                    استمع للأرقام 🔊
+                                </button>
+                                ` : ''}
+                            </div>
+                            
+                            <!-- Navigation -->
+                            <div class="bg-gray-50 p-6 flex justify-between">
+                                ${state.currentSection > 0 ? `
+                                <button onclick="previousSection()" class="bg-white text-gray-700 px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-lg flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                    </svg>
+                                    السابق
+                                </button>
+                                ` : '<div></div>'}
+                                
+                                <button onclick="nextSection()" class="bg-blue-500 text-white px-6 py-3 rounded-full font-medium hover:bg-blue-600 transition-all shadow-lg flex items-center gap-2">
+                                    ${state.currentSection < lesson.sections.length - 1 ? 'التالي' : 'ابدأ التمارين'}
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }
             
-            window.handleAnswerSelect = function(answer) {
-                state.selectedAnswer = answer;
-                state.showResult = true;
+            function renderExercise() {
+                const lesson = lessons[state.currentLesson];
+                const exercise = lesson.exercises[state.currentExercise];
                 
-                const correctAnswer = lessons[state.currentLesson].exercises[state.currentExercise].options[0];
-                if (answer === correctAnswer) {
-                    state.score += 1;
-                }
+                app.innerHTML = `
+                    <!-- Exercise Header -->
+                    <div class="relative h-48 bg-cover bg-center" style="background-image: url(${lesson.bannerImage})">
+                        <div class="absolute inset-0 ${lesson.color} bg-opacity-80"></div>
+                        <div class="relative max-w-7xl mx-auto px-4 py-8 flex flex-col h-full justify-center">
+                            <div class="text-center text-white">
+                                <h1 class="text-3xl font-bold mb-2">${lesson.title}</h1>
+                                <p class="text-lg opacity-90">تمرين ${state.currentExercise + 1} من ${lesson.exercises.length}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exercise Content -->
+                    <div class="max-w-4xl mx-auto px-4 py-8">
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                            <div class="p-8">
+                                <div class="flex justify-between items-center mb-6">
+                                    <h2 class="text-xl font-bold text-gray-800">${exercise.instruction}</h2>
+                                    <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">
+                                        ${exercise.type === "listening" ? "الاستماع" : exercise.type === "translation" ? "الترجمة" : "المطابقة"}
+                                    </span>
+                                </div>
+                                
+                                ${exercise.image ? `
+                                <div class="flex justify-center mb-6">
+                                    <img src="${exercise.image}" class="rounded-xl h-48 object-cover">
+                                </div>
+                                ` : ''}
+                                
+                                <div class="text-center mb-8">
+                                    <div class="flex items-center justify-center gap-4 mb-4">
+                                        <h3 class="text-3xl font-bold text-gray-800">${exercise.german}</h3>
+                                        ${exercise.audio ? `
+                                        <button onclick="playAudio('${exercise.audio}')" class="p-4 rounded-full transition-all shadow-lg ${
+                                            state.isPlaying ? "bg-red-500 text-white pulse" : "bg-blue-500 text-white hover:bg-blue-600 hover:scale-110"
+                                        }">
+                                            ${state.isPlaying ? "⏸️" : "🔊"}
+                                        </button>
+                                        ` : ''}
+                                    </div>
+                                    <p class="text-xl text-gray-600">${exercise.english}</p>
+                                </div>
+                                
+                                ${exercise.type !== "matching" ? `
+                                <!-- Multiple Choice Options -->
+                                <div class="space-y-4 mb-8">
+                                    ${exercise.options.map((option, index) => `
+                                    <button onclick="${!state.showResult ? `checkAnswer('${option}')` : ''}" class="w-full p-6 text-right rounded-xl border-2 transition-all text-xl shadow-md ${
+                                        state.showResult
+                                            ? option === exercise.options[0]
+                                                ? "border-green-500 bg-green-50 text-green-700 shadow-green-200"
+                                                : option === state.selectedAnswer && option !== exercise.options[0]
+                                                ? "border-red-500 bg-red-50 text-red-700 shadow-red-200"
+                                                : "border-gray-200 bg-gray-50 text-gray-500"
+                                            : "border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer hover:shadow-lg hover:scale-102"
+                                    }">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                ${state.showResult && option === exercise.options[0] ? "✅" : ''}
+                                                ${state.showResult && option === state.selectedAnswer && option !== exercise.options[0] ? "❌" : ''}
+                                            </div>
+                                            <div>${option}</div>
+                                        </div>
+                                    </button>
+                                    `).join('')}
+                                </div>
+                                ` : `
+                                <!-- Matching Exercise -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                                    ${exercise.pairs.map((pair, index) => `
+                                    <div class="bg-gray-50 p-4 rounded-xl">
+                                        <div class="text-xl font-bold text-center mb-2">${pair.german}</div>
+                                        <select class="w-full p-3 border border-gray-300 rounded-lg">
+                                        <select class="w-full p-3 border border-gray-300 rounded-lg">
+                                            <option value="">اختر الترجمة الصحيحة</option>
+                                            ${exercise.pairs.map((p, i) => `
+                                            <option value="${p.arabic}" ${state.showResult && p.arabic === pair.arabic ? 'selected' : ''}>
+                                                ${p.arabic}
+                                            </option>
+                                            `).join('')}
+                                        </select>
+                                    </div>
+                                    `).join('')}
+                                </div>
+                                `}
+                                
+                                ${state.showResult ? `
+                                <div class="bg-blue-50 p-6 rounded-xl mb-6">
+                                    <h4 class="font-bold text-blue-800 mb-2">📝 الشرح:</h4>
+                                    <p class="text-blue-700">${exercise.explanation}</p>
+                                </div>
+                                ` : ''}
+                            </div>
+                            
+                            <!-- Navigation -->
+                            <div class="bg-gray-50 p-6 flex justify-between">
+                                ${state.currentExercise > 0 ? `
+                                <button onclick="previousExercise()" class="bg-white text-gray-700 px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-lg flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                    </svg>
+                                    السابق
+                                </button>
+                                ` : '<div></div>'}
+                                
+                                <button onclick="${state.showResult ? 'nextExercise()' : 'showAnswer()'}" class="bg-blue-500 text-white px-6 py-3 rounded-full font-medium hover:bg-blue-600 transition-all shadow-lg flex items-center gap-2">
+                                    ${state.showResult ? 
+                                        (state.currentExercise < lesson.exercises.length - 1 ? 'التالي' : 'إنهاء الدرس') 
+                                        : 'تحقق من الإجابة'}
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            function renderVocabulary() {
+                app.innerHTML = `
+                    <!-- Vocabulary Header -->
+                    <div class="relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-16">
+                        <div class="absolute inset-0 bg-black opacity-20"></div>
+                        <div class="relative max-w-7xl mx-auto px-4 text-center">
+                            <button onclick="setView('home')" class="absolute top-4 right-4 bg-white bg-opacity-20 text-white p-2 rounded-full hover:bg-opacity-30 transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                            </button>
+                            <h1 class="text-4xl font-bold mb-4">المفردات الألمانية</h1>
+                            <p class="text-xl opacity-90">تعلم الكلمات الأساسية وتذكرها بسهولة</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Vocabulary Categories -->
+                    <div class="max-w-7xl mx-auto px-4 py-12">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            ${vocabularyCategories.map(category => `
+                            <div onclick="showVocabCards(${category.id})" class="bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer transition-all hover:shadow-2xl hover:-translate-y-1">
+                                <div class="h-48 ${category.color} flex items-center justify-center text-white text-7xl">
+                                    ${category.icon}
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-2">${category.name}</h3>
+                                    <p class="text-gray-600">${category.nameEn}</p>
+                                    <div class="mt-4 text-sm text-gray-500">
+                                        ${category.cards.length} كلمة
+                                    </div>
+                                </div>
+                            </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Vocabulary Cards Modal -->
+                    ${state.showVocabCard ? `
+                    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                            <div class="p-6">
+                                <div class="flex justify-between items-center mb-6">
+                                    <h3 class="text-xl font-bold text-gray-800">${vocabularyCategories.find(c => c.id === state.currentVocabCategory).name}</h3>
+                                    <button onclick="hideVocabCards()" class="text-gray-500 hover:text-gray-700">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    ${vocabularyCategories.find(c => c.id === state.currentVocabCategory).cards.map((card, index) => `
+                                    <div class="bg-gray-50 rounded-xl p-6">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <div class="text-3xl font-bold">${card.german}</div>
+                                            <button onclick="playAudio('${card.audio}')" class="p-3 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-all">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 012.728-2.728" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="flex items-center gap-4">
+                                            ${card.image ? `<img src="${card.image}" class="w-20 h-20 rounded-lg object-cover">` : ''}
+                                            <div>
+                                                <div class="text-gray-600">${card.english}</div>
+                                                <div class="text-blue-600 font-medium mt-1">${card.arabic}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                `;
+            }
+            
+            // Helper functions
+            function playAudio(url, startTime = 0) {
+                const audio = new Audio(url);
+                audio.currentTime = startTime;
+                audio.play();
+                state.isPlaying = true;
                 
-                // Simulate translation (in a real app you'd call an API)
-                state.arabicTranslation = "ترجمة: " + answer;
+                audio.onended = () => {
+                    state.isPlaying = false;
+                    render();
+                };
+                
                 render();
             }
             
-            window.nextExercise = function() {
-                const currentLessonData = lessons[state.currentLesson];
-                
-                if (state.currentExercise < currentLessonData.exercises.length - 1) {
-                    state.currentExercise += 1;
-                } else if (state.currentLesson < lessons.length - 1) {
-                    state.currentLesson += 1;
-                    state.currentExercise = 0;
-                }
-                
-                state.selectedAnswer = "";
+            function setView(view) {
+                state.currentView = view;
                 state.showResult = false;
-                state.arabicTranslation = "";
+                state.selectedAnswer = "";
+                pageTurnSound.play();
                 render();
             }
             
-            window.resetProgress = function() {
+            function startLearning() {
                 state.currentLesson = 0;
+                state.currentSection = 0;
                 state.currentExercise = 0;
-                state.score = 0;
-                state.selectedAnswer = "";
-                state.showResult = false;
-                state.arabicTranslation = "";
+                setView('lesson');
+            }
+            
+            function continueLearning() {
+                if (state.completedLessons.length === 0) return;
+                
+                // Find the first uncompleted lesson
+                const nextLessonIndex = lessons.findIndex(lesson => !state.completedLessons.includes(lesson.id));
+                state.currentLesson = nextLessonIndex !== -1 ? nextLessonIndex : 0;
+                state.currentSection = 0;
+                state.currentExercise = 0;
+                setView('lesson');
+            }
+            
+            function startLesson(index) {
+                state.currentLesson = index;
+                state.currentSection = 0;
+                state.currentExercise = 0;
+                setView('lesson');
+            }
+            
+            function setSection(index) {
+                if (index <= state.currentSection) {
+                    state.currentSection = index;
+                    render();
+                }
+            }
+            
+            function nextSection() {
+                const lesson = lessons[state.currentLesson];
+                
+                if (state.currentSection < lesson.sections.length - 1) {
+                    state.currentSection++;
+                    pageTurnSound.play();
+                } else {
+                    // Move to exercises
+                    state.currentExercise = 0;
+                    setView('exercise');
+                }
+                
                 render();
             }
+            
+            function previousSection() {
+                if (state.currentSection > 0) {
+                    state.currentSection--;
+                    pageTurnSound.play();
+                    render();
+                }
+            }
+            
+            function checkAnswer(answer) {
+                state.selectedAnswer = answer;
+                const exercise = lessons[state.currentLesson].exercises[state.currentExercise];
+                
+                if (answer === exercise.options[0]) {
+                    correctSound.play();
+                    state.score += 10;
+                } else {
+                    wrongSound.play();
+                }
+                
+                state.showResult = true;
+                render();
+            }
+            
+            function showAnswer() {
+                state.showResult = true;
+                render();
+            }
+            
+            function nextExercise() {
+                const lesson = lessons[state.currentLesson];
+                
+                if (state.currentExercise < lesson.exercises.length - 1) {
+                    state.currentExercise++;
+                    state.showResult = false;
+                    state.selectedAnswer = "";
+                    pageTurnSound.play();
+                } else {
+                    // Lesson completed
+                    if (!state.completedLessons.includes(lesson.id)) {
+                        state.completedLessons.push(lesson.id);
+                    }
+                    successSound.play();
+                    setView('home');
+                    return;
+                }
+                
+                render();
+            }
+            
+            function previousExercise() {
+                if (state.currentExercise > 0) {
+                    state.currentExercise--;
+                    state.showResult = false;
+                    state.selectedAnswer = "";
+                    pageTurnSound.play();
+                    render();
+                }
+            }
+            
+            function showVocabCards(categoryId) {
+                state.currentVocabCategory = categoryId;
+                state.showVocabCard = true;
+                render();
+            }
+            
+            function hideVocabCards() {
+                state.showVocabCard = false;
+                render();
+            }
+            
+            // Make functions available globally
+            window.setView = setView;
+            window.startLearning = startLearning;
+            window.continueLearning = continueLearning;
+            window.startLesson = startLesson;
+            window.setSection = setSection;
+            window.nextSection = nextSection;
+            window.previousSection = previousSection;
+            window.checkAnswer = checkAnswer;
+            window.showAnswer = showAnswer;
+            window.nextExercise = nextExercise;
+            window.previousExercise = previousExercise;
+            window.playAudio = playAudio;
+            window.showVocabCards = showVocabCards;
+            window.hideVocabCards = hideVocabCards;
             
             // Initial render
             render();
