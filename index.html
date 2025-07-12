@@ -1,488 +1,469 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRIS Language - Tutor Academy</title>
+    <title>تعلم الألمانية | Learn German</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            color: #1e293b;
+            font-family: 'Tajawal', sans-serif;
         }
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            display: none; /* Hidden by default */
+        
+        /* Animation for correct/wrong answers */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .video-container.active {
-            display: block; /* Shown when active */
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
         }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-        .locked-section {
-            background-color: #f1f5f9;
-            color: #64748b;
-            cursor: not-allowed;
-            position: relative;
-            overflow: hidden;
-            border-radius: 0.75rem;
-            border: 1px solid #e2e8f0;
-            transition: all 0.2s ease;
-        }
-        .locked-section::after {
-            content: '🔒';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2.5rem;
-            opacity: 0.2;
-            pointer-events: none;
-        }
-        .content-card {
-            transition: all 0.3s ease;
-            border-radius: 0.75rem;
-            overflow: hidden;
-            cursor: pointer; /* Indicate clickable */
-        }
-        .content-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        #password-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        #password-modal {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 0.75rem;
-            text-align: center;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        #password-input {
-            padding: 0.5rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.375rem;
-            margin-top: 1rem;
-            width: 80%;
-            max-width: 300px;
-            display: block; /* Make inputs stack */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        #password-submit {
-            background-color: #2563eb;
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 0.375rem;
-            margin-top: 1rem;
-            cursor: pointer;
-            border: none;
-        }
-        #password-error {
-            color: red;
-            margin-top: 0.5rem;
-            display: none;
-        }
-        .assignment-container {
-            display: none; /* Hidden by default */
-            margin-top: 1rem;
-        }
-        .assignment-container.active {
-            display: block; /* Shown when active */
-        }
-        .assignment-toggle {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 0.375rem;
-            background-color: #f1f5f9;
-            margin-top: 1rem;
-        }
-        .assignment-toggle:hover {
-            background-color: #e2e8f0;
-        }
-        .chapter-divider {
-            height: 1px;
-            background: linear-gradient(to right, transparent, #cbd5e1, transparent);
-            margin: 2rem 0;
-        }
-        .chapter-header {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-        .chapter-header::after {
-            content: '';
-            position: absolute;
-            bottom: -0.5rem;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(to right, transparent, #cbd5e1, transparent);
-        }
-        .announcement-banner {
-            background: linear-gradient(135deg, #f59e0b, #ef4444);
-            color: white;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 2rem;
-            animation: pulse 2s infinite;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
+        
+        /* Pulse animation for audio button */
         @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
         }
     </style>
 </head>
-<body class="antialiased">
-    <div id="password-overlay">
-        <div id="password-modal">
-            <h2 class="text-2xl font-bold mb-4">Access Restricted</h2>
-            <p>Please enter the password to access the content.</p>
-            <input type="password" id="password-input" placeholder="Password">
-            <button id="password-submit">Submit</button>
-            <p id="password-error">Incorrect Password. Please try again.</p>
-        </div>
-    </div>
-
-    <div id="main-content" class="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-50 to-white hidden">
-        <header class="w-full max-w-5xl text-center mb-16">
-            <div class="mb-6">
-                <div class="w-20 h-20 bg-blue-600 rounded-xl shadow-lg mx-auto flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                </div>
-            </div>
-            <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight mb-4">
-                IRIS Language <span class="text-blue-600">Tutor Academy</span>
-            </h1>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Your comprehensive journey to linguistic mastery and teaching excellence.</p>
-        </header>
-
-        <main class="w-full max-w-5xl bg-white shadow-lg rounded-xl overflow-hidden mb-16">
-            <!-- Important Announcement Banner -->
-            <div class="announcement-banner mx-6 mt-6">
-                <div class="flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    <h3 class="font-bold text-lg">Important Announcement</h3>
-                </div>
-                <p class="mt-2 text-center">
-                    Our video hosting is temporarily suspended. Please use this 
-                    <a href="https://drive.google.com/drive/folders/1j92-a2SEE5v5htwMQR47w0FpTF-OFrOi?usp=drive_link" 
-                       target="_blank" 
-                       class="font-bold underline hover:text-yellow-200 transition-colors">
-                        alternative Google Drive link
-                    </a> 
-                    to access the course videos.
-                </p>
-                <p class="mt-1 text-sm text-yellow-100 text-center">
-                    We apologize for the inconvenience and appreciate your understanding.
-                </p>
-            </div>
-
-            <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-6 sm:p-8 text-white">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-2">Foundations of Language Teaching Methodology</h2>
-                <p class="text-blue-100 leading-relaxed">
-                    A systematic approach to teaching languages, methodology provides a framework for informed teaching decisions.
-                </p>
-            </div>
-            
-            <!-- Rest of the content remains the same -->
-            <div class="p-6 sm:p-8 lg:p-10">
-                <!-- Chapter 1 -->
-                <div class="chapter-header">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Chapter 1: Understanding Language Learning Principles</h2>
-                    <p class="text-gray-600">Explore the core principles of language acquisition and teaching methodologies.</p>
-                </div>
-                
-                <div class="space-y-6 mb-8">
-                    <section class="content-card bg-white p-6 rounded-xl shadow-sm border border-gray-100" data-video-id="intro">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                            <span class="w-8 h-8 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center mr-3">1</span>
-                            Introduction
-                        </h3>
-                        <div class="video-container" id="video-intro">
-                            <iframe src="https://jumpshare.com/embed/OFjpd5KQ9mwQRaaFE6r3" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed">
-                            Welcome to the Foundations of Language Teaching Methodology! This introductory video sets the stage for our comprehensive exploration into effective language instruction.
-                        </p>
-                    </section>
-
-                    <section class="content-card bg-white p-6 rounded-xl shadow-sm border border-gray-100" data-video-id="chapter1">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                            <span class="w-8 h-8 bg-green-100 text-green-800 rounded-full flex items-center justify-center mr-3">2</span>
-                            Core Principles of Language Acquisition
-                        </h3>
-                        <div class="video-container" id="video-chapter1">
-                            <iframe src="https://jumpshare.com/embed/dNHTbvbPJ5YapQmNvX3N" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed">
-                            Dive into the core principles that underpin successful language acquisition. This chapter explores various theories and approaches to how learners absorb new languages.
-                        </p>
-                    </section>
-
-                    <div class="bg-blue-50 p-6 rounded-xl shadow-sm border border-blue-100">
-                        <h3 class="text-xl font-semibold text-blue-800 mb-4 flex items-center">
-                            <span class="w-8 h-8 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center mr-3">📝</span>
-                            Chapter 1 Assignment
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            All tutors need to submit an audio assignment in response to one of the 3 debatable questions.
-                        </p>
-                        <div class="assignment-toggle" onclick="toggleAssignment('assignment1')">
-                            <span class="font-medium text-blue-600">Click to view assignment details</span>
-                            <svg class="w-5 h-5 ml-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div class="assignment-container" id="assignment1">
-                            <p class="text-gray-700 leading-relaxed mb-4">
-                                Assessment will be done after we review your answers, and scoring will be on the basis of originality and language skills, and how close you have reviewed the chapter.
-                            </p>
-                            <p class="text-gray-700 leading-relaxed mb-4">
-                                Please give priority to the questions that have no or little attention by other peers.
-                            </p>
-                            <p class="text-red-600 font-semibold mb-4">
-                                Deadline for assignment submission for Chapter One assessment is: 04/06/2025
-                            </p>
-                            <a href="https://padlet.com/ishakinsa/chapter-01-assessement-7n5uajtvt92urwx1" target="_blank" class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
-                                Go to Assignment Link
-                            </a>
-                            <p class="text-gray-800 font-semibold mt-4">Best of luck; <br>Ishak ZERDAZI</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chapter-divider"></div>
-
-                <!-- Chapter 2 -->
-                <div class="chapter-header">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Chapter 2: Communicative Approaches to ELT</h2>
-                    <p class="text-gray-600">Learn about methodologies focused on real-world communication in language teaching.</p>
-                </div>
-                
-                <div class="space-y-6 mb-8">
-                    <section class="content-card bg-white p-6 rounded-xl shadow-sm border border-gray-100" data-video-id="chapter2">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                            <span class="w-8 h-8 bg-purple-100 text-purple-800 rounded-full flex items-center justify-center mr-3">3</span>
-                            Communicative Language Teaching
-                        </h3>
-                        <div class="video-container" id="video-chapter2">
-                            <iframe src="https://jumpshare.com/embed/BSN8rHKXZ3e2m4c5cHqQ" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed">
-                            Explore methodologies focused on real-world communication and interaction in English Language Teaching.
-                        </p>
-                    </section>
-
-                    <div class="bg-blue-50 p-6 rounded-xl shadow-sm border border-blue-100">
-                        <h3 class="text-xl font-semibold text-blue-800 mb-4 flex items-center">
-                            <span class="w-8 h-8 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center mr-3">📝</span>
-                            Chapter 2 Assignment
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Complete the following form to submit your assignment for Chapter Two.
-                        </p>
-                        <div class="assignment-toggle" onclick="toggleAssignment('assignment2')">
-                            <span class="font-medium text-blue-600">Click to view assignment</span>
-                            <svg class="w-5 h-5 ml-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div class="assignment-container" id="assignment2">
-                            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScWc4LnkpYOBlNao685wiMJY8m91ATwGJVwjhMLXrayaN6-Jw/viewform?embedded=true" width="100%" height="866" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
-                            <p class="text-gray-800 font-semibold mt-4">Best of luck; <br>Ishak ZERDAZI</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chapter-divider"></div>
-
-                <!-- Chapter 3 -->
-                <div class="chapter-header">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Chapter 3: Learner-Centered Approaches</h2>
-                    <p class="text-gray-600">Discover strategies for empowering learners and classroom management.</p>
-                </div>
-                
-                <div class="space-y-6 mb-8">
-                    <section class="content-card bg-white p-6 rounded-xl shadow-sm border border-gray-100" data-video-id="chapter3">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                            <span class="w-8 h-8 bg-yellow-100 text-yellow-800 rounded-full flex items-center justify-center mr-3">4</span>
-                            Classroom Management Strategies
-                        </h3>
-                        <div class="video-container" id="video-chapter3">
-                            <iframe src="https://jumpshare.com/embed/nxr2NUsTntg06vrlbfcJ" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed">
-                            Discover strategies for empowering learners and effectively managing your language classroom.
-                        </p>
-                    </section>
-
-                    <div class="bg-blue-50 p-6 rounded-xl shadow-sm border border-blue-100">
-                        <h3 class="text-xl font-semibold text-blue-800 mb-4 flex items-center">
-                            <span class="w-8 h-8 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center mr-3">📝</span>
-                            Chapter 3 Assignment
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Complete the following form to submit your assignment for Chapter Three.
-                        </p>
-                        <div class="assignment-toggle" onclick="toggleAssignment('assignment3')">
-                            <span class="font-medium text-blue-600">Click to view assignment</span>
-                            <svg class="w-5 h-5 ml-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div class="assignment-container" id="assignment3">
-                            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdM5ZDbNVYEPae_OvJnTUVCqD_Lg9ItQtm1kQZTSgNThoMLiQ/viewform?embedded=true" width="100%" height="882" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
-                            <p class="text-gray-800 font-semibold mt-4">Best of luck; <br>Ishak ZERDAZI</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chapter-divider"></div>
-
-                <!-- Chapter 4 (Final Chapter) -->
-                <div class="chapter-header">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Chapter 4: Assessment and Professional Development in ELT</h2>
-                    <p class="text-gray-600">Understand effective assessment techniques and pathways for continuous professional growth in English Language Teaching.</p>
-                </div>
-                
-                <div class="space-y-6 mb-8">
-                    <section class="content-card bg-white p-6 rounded-xl shadow-sm border border-gray-100" data-video-id="chapter4">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                            <span class="w-8 h-8 bg-indigo-100 text-indigo-800 rounded-full flex items-center justify-center mr-3">5</span>
-                            Assessment Techniques and Professional Growth
-                        </h3>
-                        <div class="video-container" id="video-chapter4">
-                            <iframe src="https://jumpshare.com/embed/fDYvA1S3rIXF6ph91QOa" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed">
-                            Learn about effective assessment techniques and pathways for continuous professional development in English Language Teaching.
-                        </p>
-                    </section>
-
-                    <div class="bg-blue-50 p-6 rounded-xl shadow-sm border border-blue-100">
-                        <h3 class="text-xl font-semibold text-blue-800 mb-4 flex items-center">
-                            <span class="w-8 h-8 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center mr-3">📝</span>
-                            Chapter 4 Assignment
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Complete the following form to submit your final assignment.
-                        </p>
-                        <div class="assignment-toggle" onclick="toggleAssignment('assignment4')">
-                            <span class="font-medium text-blue-600">Click to view assignment</span>
-                            <svg class="w-5 h-5 ml-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div class="assignment-container" id="assignment4">
-                            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf7RcRleLUrj5VRoDaCrOB40QjI3mwF0oeZr2Pyeu35jUWNNQ/viewform?embedded=true" width="100%" height="1472" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
-                            <p class="text-gray-800 font-semibold mt-4">Best of luck; <br>Ishak ZERDAZI</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chapter-divider"></div>
-
-                <!-- Upcoming Chapters (only Final Test remains) -->
-                <div class="space-y-6">
-                    <section class="locked-section p-6 rounded-xl">
-                        <h3 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
-                            <span class="w-8 h-8 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center mr-3">6</span>
-                            Final Test
-                        </h3>
-                        <p class="text-gray-600">Test your knowledge and understanding of language teaching methodologies. (Locked)</p>
-                    </section>
-                </div>
-            </div>
-        </main>
-
-        <footer class="w-full max-w-5xl text-center text-gray-500 text-sm pb-8">
-            <div class="border-t border-gray-200 pt-8">
-                <p>&copy; 2025 IRIS Language - Tutor Academy. All rights reserved.</p>
-                <p class="mt-2 text-gray-400">Elevating language education through innovative teaching methodologies.</p>
-            </div>
-        </footer>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div id="app">
+        <!-- App will be rendered here -->
     </div>
 
     <script>
-        const correctPassword = "IRIS-DZ-2025"; // Single password
-        const passwordInput = document.getElementById('password-input');
-        const passwordSubmit = document.getElementById('password-submit');
-        const passwordOverlay = document.getElementById('password-overlay');
-        const passwordError = document.getElementById('password-error');
-        const mainContent = document.getElementById('main-content');
-        const contentCards = document.querySelectorAll('.content-card');
-
-        passwordSubmit.addEventListener('click', () => {
-            if (passwordInput.value === correctPassword) {
-                passwordOverlay.style.display = 'none';
-                mainContent.classList.remove('hidden');
-            } else {
-                passwordError.style.display = 'block';
-            }
-        });
-
-        contentCards.forEach(card => {
-            card.addEventListener('click', () => {
-                const videoId = card.dataset.videoId;
-                if (videoId) {
-                    const videoContainer = document.getElementById(`video-${videoId}`);
-                    // Hide all video containers first
-                    document.querySelectorAll('.video-container').forEach(container => {
-                        container.classList.remove('active');
-                    });
-                    // Show the clicked video container
-                    videoContainer.classList.add('active');
-                }
-            });
-        });
-
-        function toggleAssignment(id) {
-            const assignment = document.getElementById(id);
-            assignment.classList.toggle('active');
+        document.addEventListener('DOMContentLoaded', function() {
+            const app = document.getElementById('app');
             
-            // Toggle the arrow icon
-            const toggle = assignment.previousElementSibling;
-            const icon = toggle.querySelector('svg');
-            icon.classList.toggle('transform');
-            icon.classList.toggle('rotate-180');
-        }
+            // Lessons data
+            const lessons = [
+                {
+                    title: "التحيات والعبارات الأساسية",
+                    titleEn: "Greetings & Basic Phrases",
+                    color: "bg-gradient-to-r from-blue-500 to-blue-600",
+                    icon: "👋",
+                    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop",
+                    exercises: [
+                        {
+                            german: "Guten Morgen",
+                            english: "Good morning",
+                            type: "pronunciation",
+                            image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop",
+                            options: ["صباح الخير", "مساء الخير", "ليلة سعيدة", "وداعاً"],
+                            explanation: "Used until 10 AM"
+                        },
+                        {
+                            german: "Wie heißt du?",
+                            english: "What is your name?",
+                            type: "translation",
+                            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&fit=crop",
+                            options: ["ما اسمك؟", "كيف حالك؟", "من أين أنت؟", "كم عمرك؟"],
+                            explanation: "Informal way to ask someone's name"
+                        }
+                    ]
+                },
+                {
+                    title: "الأرقام والوقت",
+                    titleEn: "Numbers & Time",
+                    color: "bg-gradient-to-r from-green-500 to-green-600",
+                    icon: "🕐",
+                    image: "https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400&h=200&fit=crop",
+                    exercises: [
+                        {
+                            german: "Wie viel Uhr ist es?",
+                            english: "What time is it?",
+                            type: "translation",
+                            image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=300&h=200&fit=crop",
+                            options: ["كم الساعة؟", "أين الساعة؟", "متى الوقت؟", "ما هذا؟"],
+                            explanation: "Standard way to ask for time"
+                        }
+                    ]
+                }
+            ];
+            
+            // Vocabulary data
+            const vocabularyCards = [
+                {
+                    category: "Basic Greetings",
+                    color: "bg-blue-500",
+                    cards: [
+                        { german: "Hallo", english: "Hello", arabic: "مرحباً", image: "👋" },
+                        { german: "Tschüss", english: "Bye", arabic: "وداعاً", image: "👋" }
+                    ]
+                }
+            ];
+            
+            // App state
+            let state = {
+                currentLesson: 0,
+                currentExercise: 0,
+                score: 0,
+                selectedAnswer: "",
+                showResult: false,
+                arabicTranslation: "",
+                isPlaying: false,
+                showVocabCard: false,
+                viewMode: "lessons"
+            };
+            
+            // Render the app
+            function render() {
+                const currentLessonData = lessons[state.currentLesson];
+                const currentExerciseData = currentLessonData.exercises[state.currentExercise];
+                
+                app.innerHTML = `
+                    <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+                        <!-- Header -->
+                        <div class="bg-white shadow-lg border-b-4 border-gradient-to-r from-blue-500 to-purple-600">
+                            <div class="max-w-6xl mx-auto px-4 py-6">
+                                <div class="text-center mb-6">
+                                    <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                                        🇩🇪 تعلم الألمانية 🇸🇦
+                                    </h1>
+                                    <p class="text-xl text-gray-600 mb-4">
+                                        Learn German for Arabic Speakers | تعلم الألمانية للناطقين بالعربية
+                                    </p>
+                                    
+                                    <!-- Navigation Tabs -->
+                                    <div class="flex justify-center gap-4 mb-6">
+                                        <button onclick="setViewMode('lessons')" class="px-6 py-3 rounded-full font-medium transition-all ${
+                                            state.viewMode === "lessons" 
+                                                ? "bg-blue-500 text-white shadow-lg" 
+                                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                        }">
+                                            📚 الدروس | Lessons
+                                        </button>
+                                        <button onclick="setViewMode('vocabulary')" class="px-6 py-3 rounded-full font-medium transition-all ${
+                                            state.viewMode === "vocabulary" 
+                                                ? "bg-purple-500 text-white shadow-lg" 
+                                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                        }">
+                                            📖 المفردات | Vocabulary
+                                        </button>
+                                    </div>
+                                    
+                                    ${state.viewMode === "lessons" ? `
+                                    <!-- Progress Bar -->
+                                    <div class="bg-white rounded-xl p-6 shadow-md max-w-md mx-auto">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="text-sm text-gray-600">التقدم | Progress</span>
+                                            <span class="text-lg font-bold text-blue-600">🏆 النقاط: ${state.score}</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3">
+                                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-500" style="width: ${
+                                                ((state.currentLesson * lessons[0].exercises.length + state.currentExercise + 1) / 
+                                                (lessons.length * lessons[0].exercises.length)) * 100
+                                            }%"></div>
+                                        </div>
+                                        <div class="text-xs text-gray-500 mt-1 text-center">
+                                            الدرس ${state.currentLesson + 1} من ${lessons.length} | التمرين ${state.currentExercise + 1}
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        ${state.viewMode === "vocabulary" ? `
+                        <!-- Vocabulary Cards View -->
+                        <div class="max-w-6xl mx-auto px-4 py-8">
+                            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">
+                                📖 بطاقات المفردات | Vocabulary Cards
+                            </h2>
+                            
+                            ${vocabularyCards.map((category, categoryIndex) => `
+                            <div key="${categoryIndex}" class="mb-12">
+                                <h3 class="text-2xl font-bold text-white p-4 rounded-t-xl ${category.color}">
+                                    ${category.category}
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 bg-white p-6 rounded-b-xl shadow-lg">
+                                    ${category.cards.map((card, cardIndex) => `
+                                    <div key="${cardIndex}" class="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all cursor-pointer hover:scale-105" onclick="speakGerman('${card.german}')">
+                                        <div class="text-4xl text-center mb-3">
+                                            ${card.image}
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xl font-bold text-gray-800 mb-2">
+                                                ${card.german}
+                                            </div>
+                                            <div class="text-sm text-gray-600 mb-1">
+                                                ${card.english}
+                                            </div>
+                                            <div class="text-lg text-blue-600 font-medium">
+                                                ${card.arabic}
+                                            </div>
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <button class="text-blue-500 hover:text-blue-700 text-sm">
+                                                🔊 استمع | Listen
+                                            </button>
+                                        </div>
+                                    </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            `).join('')}
+                        </div>
+                        ` : `
+                        <!-- Lessons View -->
+                        <div class="max-w-6xl mx-auto px-4 py-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                                ${lessons.map((lesson, index) => `
+                                <div key="${index}" onclick="setCurrentLesson(${index})" class="relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 ${
+                                    state.currentLesson === index 
+                                        ? "ring-4 ring-blue-400 shadow-2xl" 
+                                        : "shadow-lg hover:shadow-xl"
+                                }">
+                                    <div class="h-32 bg-cover bg-center" style="background-image: url(${lesson.image})">
+                                        <div class="h-full ${lesson.color} bg-opacity-80 flex items-center justify-center">
+                                            <span class="text-4xl">${lesson.icon}</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-4">
+                                        <h3 class="font-bold text-gray-800 text-sm mb-1">
+                                            ${lesson.title}
+                                        </h3>
+                                        <p class="text-xs text-gray-600">${lesson.titleEn}</p>
+                                        <div class="mt-2 text-xs text-blue-600">
+                                            ${lesson.exercises.length} تمارين | ${lesson.exercises.length} exercises
+                                        </div>
+                                    </div>
+                                </div>
+                                `).join('')}
+                            </div>
+                            
+                            <!-- Main Exercise Area -->
+                            <div class="max-w-4xl mx-auto">
+                                <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                                    <!-- Exercise Header with Image -->
+                                    <div class="relative h-64 bg-cover bg-center" style="background-image: url(${currentExerciseData.image})">
+                                        <div class="absolute inset-0 ${currentLessonData.color} bg-opacity-70 flex items-center justify-center">
+                                            <div class="text-center text-white">
+                                                <div class="text-6xl mb-4">
+                                                    ${currentLessonData.icon}
+                                                </div>
+                                                <h2 class="text-2xl font-bold mb-2">
+                                                    ${currentLessonData.title}
+                                                </h2>
+                                                <p class="text-lg opacity-90">
+                                                    ${currentLessonData.titleEn}
+                                                </p>
+                                                <div class="mt-4 bg-white bg-opacity-20 rounded-full px-4 py-2 text-sm">
+                                                    التمرين ${state.currentExercise + 1} من ${currentLessonData.exercises.length}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-8">
+                                        <!-- German Phrase with Audio -->
+                                        <div class="text-center mb-8">
+                                            <div class="flex items-center justify-center gap-4 mb-4">
+                                                <h3 class="text-4xl font-bold text-gray-800">
+                                                    ${currentExerciseData.german}
+                                                </h3>
+                                                <button onclick="speakGerman('${currentExerciseData.german}')" class="p-4 rounded-full transition-all shadow-lg ${
+                                                    state.isPlaying 
+                                                        ? "bg-red-500 text-white pulse" 
+                                                        : "bg-blue-500 text-white hover:bg-blue-600 hover:scale-110"
+                                                }">
+                                                    ${state.isPlaying ? "⏸️" : "🔊"}
+                                                </button>
+                                            </div>
+                                            <p class="text-xl text-gray-600 mb-2">
+                                                ${currentExerciseData.english}
+                                            </p>
+                                            ${state.arabicTranslation ? `
+                                            <p class="text-xl text-blue-600 font-medium">
+                                                ${state.arabicTranslation}
+                                            </p>
+                                            ` : ''}
+                                            
+                                            <!-- Exercise Type and Explanation -->
+                                            <div class="mt-6 flex flex-col items-center gap-3">
+                                                <span class="inline-block px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-600">
+                                                    ${currentExerciseData.type === "pronunciation" ? "🗣️ النطق | Pronunciation" : ''}
+                                                    ${currentExerciseData.type === "translation" ? "🔄 الترجمة | Translation" : ''}
+                                                    ${currentExerciseData.type === "structure" ? "🏗️ القواعد | Grammar Structure" : ''}
+                                                </span>
+                                                <div class="bg-blue-50 rounded-lg p-3 text-sm text-blue-700">
+                                                    💡 ${currentExerciseData.explanation}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Answer Options -->
+                                        <div class="space-y-4 mb-8">
+                                            <p class="text-center text-gray-700 font-medium text-lg mb-6">
+                                                اختر الترجمة العربية الصحيحة | Choose the correct Arabic translation:
+                                            </p>
+                                            ${currentExerciseData.options.map((option, index) => `
+                                            <button onclick="${!state.showResult ? `handleAnswerSelect('${option}')` : ''}" class="w-full p-6 text-right rounded-xl border-2 transition-all text-xl shadow-md ${
+                                                state.showResult
+                                                    ? option === currentExerciseData.options[0]
+                                                        ? "border-green-500 bg-green-50 text-green-700 shadow-green-200"
+                                                        : option === state.selectedAnswer && option !== currentExerciseData.options[0]
+                                                        ? "border-red-500 bg-red-50 text-red-700 shadow-red-200"
+                                                        : "border-gray-200 bg-gray-50 text-gray-500"
+                                                    : "border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer hover:shadow-lg hover:scale-102"
+                                            }">
+                                                <div class="flex justify-between items-center">
+                                                    <div>
+                                                        ${state.showResult && option === currentExerciseData.options[0] ? "✅" : ''}
+                                                        ${state.showResult && option === state.selectedAnswer && option !== currentExerciseData.options[0] ? "❌" : ''}
+                                                    </div>
+                                                    <div>${option}</div>
+                                                </div>
+                                            </button>
+                                            `).join('')}
+                                        </div>
+                                        
+                                        ${state.showResult ? `
+                                        <!-- Result and Next Button -->
+                                        <div class="text-center fade-in">
+                                            <div class="p-6 rounded-xl mb-6 shadow-lg ${
+                                                state.selectedAnswer === currentExerciseData.options[0]
+                                                    ? "bg-green-50 text-green-700 border-2 border-green-200"
+                                                    : "bg-red-50 text-red-700 border-2 border-red-200"
+                                            }">
+                                                ${state.selectedAnswer === currentExerciseData.options[0] ? `
+                                                <div>
+                                                    <p class="font-bold text-2xl mb-2">🎉 ممتاز! أحسنت!</p>
+                                                    <p class="text-lg">Excellent! You got it right!</p>
+                                                </div>
+                                                ` : `
+                                                <div>
+                                                    <p class="font-bold text-2xl mb-2">❌ ليس صحيحاً تماماً</p>
+                                                    <p class="text-lg mb-2">Not quite right</p>
+                                                    <p class="text-lg">
+                                                        الإجابة الصحيحة هي: <span class="font-bold">${currentExerciseData.options[0]}</span>
+                                                    </p>
+                                                </div>
+                                                `}
+                                            </div>
+                                            
+                                            <button onclick="nextExercise()" class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-10 py-4 rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all shadow-lg hover:shadow-xl text-lg">
+                                                ${state.currentExercise < currentLessonData.exercises.length - 1
+                                                    ? "التمرين التالي | Next Exercise"
+                                                    : state.currentLesson < lessons.length - 1
+                                                    ? "الدرس التالي | Next Lesson"
+                                                    : "مكتمل! | Complete!"}
+                                            </button>
+                                        </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                                
+                                <!-- Quick Actions -->
+                                <div class="flex flex-wrap gap-4 justify-center mt-8">
+                                    <button onclick="resetProgress()" class="bg-gray-500 text-white px-6 py-3 rounded-xl hover:bg-gray-600 transition-all shadow-lg">
+                                        🔄 إعادة تعيين | Reset Progress
+                                    </button>
+                                    <button onclick="speakGerman('${currentExerciseData.german}')" class="bg-green-500 text-white px-6 py-3 rounded-xl hover:bg-green-600 transition-all shadow-lg">
+                                        🔊 إعادة الصوت | Repeat Audio
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        `}
+                        
+                        <!-- Footer -->
+                        <div class="bg-gray-800 text-white py-8 mt-16">
+                            <div class="max-w-4xl mx-auto text-center px-4">
+                                <p class="text-xl mb-4">
+                                    🎯 اتقن الألمانية خطوة بخطوة | Master German step by step
+                                </p>
+                                <div class="flex justify-center gap-8 text-sm text-gray-300">
+                                    <span>📚 ${lessons.length} دروس</span>
+                                    <span>🎯 ${lessons.reduce((total, lesson) => total + lesson.exercises.length, 0)} تمرين</span>
+                                    <span>📖 ${vocabularyCards.reduce((total, category) => total + category.cards.length, 0)} مفردة</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Global functions
+            window.setViewMode = function(mode) {
+                state.viewMode = mode;
+                render();
+            }
+            
+            window.setCurrentLesson = function(index) {
+                state.currentLesson = index;
+                state.currentExercise = 0;
+                state.selectedAnswer = "";
+                state.showResult = false;
+                render();
+            }
+            
+            window.speakGerman = function(text) {
+                if ("speechSynthesis" in window) {
+                    state.isPlaying = true;
+                    render();
+                    
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = "de-DE";
+                    utterance.rate = 0.8;
+                    utterance.onend = function() {
+                        state.isPlaying = false;
+                        render();
+                    };
+                    speechSynthesis.speak(utterance);
+                }
+            }
+            
+            window.handleAnswerSelect = function(answer) {
+                state.selectedAnswer = answer;
+                state.showResult = true;
+                
+                const correctAnswer = lessons[state.currentLesson].exercises[state.currentExercise].options[0];
+                if (answer === correctAnswer) {
+                    state.score += 1;
+                }
+                
+                // Simulate translation (in a real app you'd call an API)
+                state.arabicTranslation = "ترجمة: " + answer;
+                render();
+            }
+            
+            window.nextExercise = function() {
+                const currentLessonData = lessons[state.currentLesson];
+                
+                if (state.currentExercise < currentLessonData.exercises.length - 1) {
+                    state.currentExercise += 1;
+                } else if (state.currentLesson < lessons.length - 1) {
+                    state.currentLesson += 1;
+                    state.currentExercise = 0;
+                }
+                
+                state.selectedAnswer = "";
+                state.showResult = false;
+                state.arabicTranslation = "";
+                render();
+            }
+            
+            window.resetProgress = function() {
+                state.currentLesson = 0;
+                state.currentExercise = 0;
+                state.score = 0;
+                state.selectedAnswer = "";
+                state.showResult = false;
+                state.arabicTranslation = "";
+                render();
+            }
+            
+            // Initial render
+            render();
+        });
     </script>
 </body>
 </html>
