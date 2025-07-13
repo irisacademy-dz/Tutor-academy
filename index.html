@@ -1,906 +1,543 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تعلم الألمانية بطريقة ممتعة | Fun German Learning</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>IRIS Language Academy - Lehrer VerfÃ¼gbarkeit</title>
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --whatsapp-color: #25D366;
+            --dark-color: #2c3e50;
+            --light-color: #f5f5f5;
+            --border-color: #ddd;
+        }
+        
         body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--light-color);
         }
         
-        .lesson-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        h1, h2 {
+            color: var(--dark-color);
+            margin-top: 0;
         }
         
-        .pulse {
-            animation: pulse 1.5s infinite;
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
         }
         
+        h2 {
+            font-size: 22px;
+            margin: 25px 0 15px 0;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        input[type="text"], 
+        input[type="email"],
+        input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input[type="text"]:focus, 
+        input[type="email"]:focus,
+        input[type="date"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .availability-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .time-slot {
+            padding: 10px;
+            text-align: center;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .time-slot:hover {
+            background-color: #e9ecef;
+        }
+        
+        .time-slot.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .day-header {
+            grid-column: span 8;
+            font-weight: bold;
+            margin-top: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--dark-color);
+            font-size: 18px;
+        }
+        
+        .time-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-color);
+            padding: 8px 0;
+        }
+        
+        button {
+            border: none;
+            padding: 14px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 25px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-left: 5px solid var(--primary-color);
+            margin-bottom: 30px;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .print-btn {
+            background-color: var(--dark-color);
+            color: white;
+            margin-right: 15px;
+        }
+        
+        .print-btn:hover {
+            background-color: #1a252f;
+        }
+        
+        .whatsapp-btn {
+            background-color: var(--whatsapp-color);
+            color: white;
+        }
+        
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 30px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        @media print {
+            body, .container {
+                background-color: white;
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            
+            button {
+                display: none;
+            }
+            
+            .instructions {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .availability-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .day-header {
+                grid-column: span 4;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .print-btn {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+        
+        /* Animation for selected time slots */
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
         
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .floating {
-            animation: floating 3s ease-in-out infinite;
-        }
-        
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-        
-        .progress-ring__circle {
-            transition: stroke-dashoffset 0.5s;
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
+        .time-slot.selected {
+            animation: pulse 0.3s ease;
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-    <div id="app">
-        <!-- App content will be rendered here -->
+<body>
+    <div class="container">
+        <h1>IRIS Language Academy - VerfÃ¼gbarkeit melden</h1>
+        
+        <div class="instructions">
+            <h2>Liebe LehrkrÃ¤fte,</h2>
+            <p>Vielen Dank, dass Sie Ihre VerfÃ¼gbarkeit fÃ¼r den Unterricht eintragen. Bitte beachten Sie folgende Hinweise:</p>
+            <ul>
+                <li>Tragen Sie bitte Ihren vollstÃ¤ndigen Namen, Ihre Kontaktdaten und das heutige Datum ein</li>
+                <li>WÃ¤hlen Sie alle Zeiten aus, in denen Sie grundsÃ¤tzlich verfÃ¼gbar sind</li>
+                <li>Je mehr VerfÃ¼gbarkeit Sie angeben, desto mehr Unterrichtsstunden kÃ¶nnen wir Ihnen zuweisen</li>
+                <li>Bitte denken Sie daran, Pausen und Vorbereitungszeit einzuplanen</li>
+                <li>Nach dem AuswÃ¤hlen kÃ¶nnen Sie Ihren Zeitplan ausdrucken oder direkt an die Administration senden</li>
+            </ul>
+            <p><strong>Bitte geben Sie mÃ¶glichst viele verfÃ¼gbare Zeiten an, um Ihre Chancen auf Unterrichtsstunden zu erhÃ¶hen!</strong></p>
+        </div>
+
+        <form id="availabilityForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fullName">VollstÃ¤ndiger Name:</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-Mail:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="submissionDate">Datum der Angabe:</label>
+                    <input type="date" id="submissionDate" name="submissionDate" required>
+                </div>
+            </div>
+            
+            <h2>Ihre VerfÃ¼gbarkeit</h2>
+            <p>Bitte wÃ¤hlen Sie alle Zeiten aus, in denen Sie verfÃ¼gbar sind:</p>
+            
+            <div class="availability-grid" id="availabilityGrid">
+                <!-- Montag -->
+                <div class="day-header">Montag</div>
+                <div class="time-header">08:00-10:00</div>
+                <div class="time-header">10:00-12:00</div>
+                <div class="time-header">12:00-14:00</div>
+                <div class="time-header">14:00-16:00</div>
+                <div class="time-header">16:00-18:00</div>
+                <div class="time-header">18:00-20:00</div>
+                <div class="time-header">20:00-22:00</div>
+                
+                <div class="time-slot" data-day="mon" data-time="8-10"></div>
+                <div class="time-slot" data-day="mon" data-time="10-12"></div>
+                <div class="time-slot" data-day="mon" data-time="12-14"></div>
+                <div class="time-slot" data-day="mon" data-time="14-16"></div>
+                <div class="time-slot" data-day="mon" data-time="16-18"></div>
+                <div class="time-slot" data-day="mon" data-time="18-20"></div>
+                <div class="time-slot" data-day="mon" data-time="20-22"></div>
+                
+                <!-- Dienstag -->
+                <div class="day-header">Dienstag</div>
+                <div class="time-header">08:00-10:00</div>
+                <div class="time-header">10:00-12:00</div>
+                <div class="time-header">12:00-14:00</div>
+                <div class="time-header">14:00-16:00</div>
+                <div class="time-header">16:00-18:00</div>
+                <div class="time-header">18:00-20:00</div>
+                <div class="time-header">20:00-22:00</div>
+                
+                <div class="time-slot" data-day="tue" data-time="8-10"></div>
+                <div class="time-slot" data-day="tue" data-time="10-12"></div>
+                <div class="time-slot" data-day="tue" data-time="12-14"></div>
+                <div class="time-slot" data-day="tue" data-time="14-16"></div>
+                <div class="time-slot" data-day="tue" data-time="16-18"></div>
+                <div class="time-slot" data-day="tue" data-time="18-20"></div>
+                <div class="time-slot" data-day="tue" data-time="20-22"></div>
+                
+                <!-- Mittwoch -->
+                <div class="day-header">Mittwoch</div>
+                <div class="time-header">08:00-10:00</div>
+                <div class="time-header">10:00-12:00</div>
+                <div class="time-header">12:00-14:00</div>
+                <div class="time-header">14:00-16:00</div>
+                <div class="time-header">16:00-18:00</div>
+                <div class="time-header">18:00-20:00</div>
+                <div class="time-header">20:00-22:00</div>
+                
+                <div class="time-slot" data-day="wed" data-time="8-10"></div>
+                <div class="time-slot" data-day="wed" data-time="10-12"></div>
+                <div class="time-slot" data-day="wed" data-time="12-14"></div>
+                <div class="time-slot" data-day="wed" data-time="14-16"></div>
+                <div class="time-slot" data-day="wed" data-time="16-18"></div>
+                <div class="time-slot" data-day="wed" data-time="18-20"></div>
+                <div class="time-slot" data-day="wed" data-time="20-22"></div>
+                
+                <!-- Donnerstag -->
+                <div class="day-header">Donnerstag</div>
+                <div class="time-header">08:00-10:00</div>
+                <div class="time-header">10:00-12:00</div>
+                <div class="time-header">12:00-14:00</div>
+                <div class="time-header">14:00-16:00</div>
+                <div class="time-header">16:00-18:00</div>
+                <div class="time-header">18:00-20:00</div>
+                <div class="time-header">20:00-22:00</div>
+                
+                <div class="time-slot" data-day="thu" data-time="8-10"></div>
+                <div class="time-slot" data-day="thu" data-time="10-12"></div>
+                <div class="time-slot" data-day="thu" data-time="12-14"></div>
+                <div class="time-slot" data-day="thu" data-time="14-16"></div>
+                <div class="time-slot" data-day="thu" data-time="16-18"></div>
+                <div class="time-slot" data-day="thu" data-time="18-20"></div>
+                <div class="time-slot" data-day="thu" data-time="20-22"></div>
+                
+                <!-- Freitag -->
+                <div class="day-header">Freitag</div>
+                <div class="time-header">08:00-10:00</div>
+                <div class="time-header">10:00-12:00</div>
+                <div class="time-header">12:00-14:00</div>
+                <div class="time-header">14:00-16:00</div>
+                <div class="time-header">16:00-18:00</div>
+                <div class="time-header">18:00-20:00</div>
+                <div class="time-header">20:00-22:00</div>
+                
+                <div class="time-slot" data-day="fri" data-time="8-10"></div>
+                <div class="time-slot" data-day="fri" data-time="10-12"></div>
+                <div class="time-slot" data-day="fri" data-time="12-14"></div>
+                <div class="time-slot" data-day="fri" data-time="14-16"></div>
+                <div class="time-slot" data-day="fri" data-time="16-18"></div>
+                <div class="time-slot" data-day="fri" data-time="18-20"></div>
+                <div class="time-slot" data-day="fri" data-time="20-22"></div>
+                
+                <!-- Samstag -->
+                <div class="day-header">Samstag</div>
+                <div class="time-header">08:00-10:00</div>
+                <div class="time-header">10:00-12:00</div>
+                <div class="time-header">12:00-14:00</div>
+                <div class="time-header">14:00-16:00</div>
+                <div class="time-header">16:00-18:00</div>
+                <div class="time-header">18:00-20:00</div>
+                <div class="time-header">20:00-22:00</div>
+                
+                <div class="time-slot" data-day="sat" data-time="8-10"></div>
+                <div class="time-slot" data-day="sat" data-time="10-12"></div>
+                <div class="time-slot" data-day="sat" data-time="12-14"></div>
+                <div class="time-slot" data-day="sat" data-time="14-16"></div>
+                <div class="time-slot" data-day="sat" data-time="16-18"></div>
+                <div class="time-slot" data-day="sat" data-time="18-20"></div>
+                <div class="time-slot" data-day="sat" data-time="20-22"></div>
+                
+                <!-- Sonntag -->
+                <div class="day-header">Sonntag</div>
+                <div class="time-header">08:00-10:00</div>
+                <div class="time-header">10:00-12:00</div>
+                <div class="time-header">12:00-14:00</div>
+                <div class="time-header">14:00-16:00</div>
+                <div class="time-header">16:00-18:00</div>
+                <div class="time-header">18:00-20:00</div>
+                <div class="time-header">20:00-22:00</div>
+                
+                <div class="time-slot" data-day="sun" data-time="8-10"></div>
+                <div class="time-slot" data-day="sun" data-time="10-12"></div>
+                <div class="time-slot" data-day="sun" data-time="12-14"></div>
+                <div class="time-slot" data-day="sun" data-time="14-16"></div>
+                <div class="time-slot" data-day="sun" data-time="16-18"></div>
+                <div class="time-slot" data-day="sun" data-time="18-20"></div>
+                <div class="time-slot" data-day="sun" data-time="20-22"></div>
+            </div>
+            
+            <div class="button-group">
+                <button type="button" class="print-btn" id="printBtn">VerfÃ¼gbarkeit drucken</button>
+                <button type="button" class="whatsapp-btn" id="whatsappBtn">An Admin senden (WhatsApp)</button>
+            </div>
+        </form>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const app = document.getElementById('app');
-            let currentAudio = null;
-
-            // Improved audio files from reliable sources
-            const audioFiles = {
-                correct: "https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3",
-                wrong: "https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3",
-                pageTurn: "https://assets.mixkit.co/sfx/preview/mixkit-page-turn-single-1102.mp3",
-                success: "https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3",
-                greetings: {
-                    hello: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/hello--_gb_1.mp3",
-                    goodMorning: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/good-morning--_gb_1.mp3",
-                    goodbye: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/goodbye--_gb_1.mp3"
-                },
-                numbers: {
-                    one: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/one--_gb_1.mp3",
-                    two: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/two--_gb_1.mp3",
-                    three: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/three--_gb_1.mp3"
-                },
-                family: {
-                    father: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/father--_gb_1.mp3",
-                    mother: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/mother--_gb_1.mp3"
-                }
-            };
-
-            function playSound(type, specific) {
-                if (currentAudio) {
-                    currentAudio.pause();
-                    currentAudio.currentTime = 0;
+            // Set today's date as default
+            const today = new Date();
+            const dateString = today.toISOString().split('T')[0];
+            document.getElementById('submissionDate').value = dateString;
+            
+            // Time slot selection
+            const timeSlots = document.querySelectorAll('.time-slot');
+            timeSlots.forEach(slot => {
+                slot.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+            
+            // Print functionality
+            document.getElementById('printBtn').addEventListener('click', function() {
+                // First validate form
+                const fullName = document.getElementById('fullName').value;
+                const email = document.getElementById('email').value;
+                const submissionDate = document.getElementById('submissionDate').value;
+                
+                if (!fullName || !email || !submissionDate) {
+                    alert('Bitte fÃ¼llen Sie alle Felder aus (Name, E-Mail und Datum)');
+                    return;
                 }
                 
-                let audioPath;
-                if (specific) {
-                    audioPath = audioFiles[type][specific];
-                } else {
-                    audioPath = audioFiles[type];
+                const selectedSlots = document.querySelectorAll('.time-slot.selected');
+                if (selectedSlots.length === 0) {
+                    alert('Bitte wÃ¤hlen Sie mindestens eine verfÃ¼gbare Zeit aus');
+                    return;
                 }
                 
-                currentAudio = new Audio(audioPath);
-                currentAudio.play().catch(e => console.error("Audio playback failed:", e));
+                // Format date for display
+                const formattedDate = new Date(submissionDate).toLocaleDateString('de-DE', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
                 
-                currentAudio.onended = () => {
-                    currentAudio = null;
-                    render();
+                // Add teacher info to print
+                const printContent = `
+                    <h1>IRIS Language Academy - VerfÃ¼gbarkeit</h1>
+                    <h2>Lehrkraft: ${fullName}</h2>
+                    <p>E-Mail: ${email}</p>
+                    <p>Formular ausgefÃ¼llt am: ${formattedDate}</p>
+                    <h3>VerfÃ¼gbarkeit:</h3>
+                    ${getAvailabilityText()}
+                    <p>Dokument erstellt am: ${new Date().toLocaleDateString('de-DE')}</p>
+                `;
+                
+                const originalContent = document.body.innerHTML;
+                document.body.innerHTML = printContent;
+                window.print();
+                document.body.innerHTML = originalContent;
+            });
+            
+            // WhatsApp functionality
+            document.getElementById('whatsappBtn').addEventListener('click', function() {
+                // First validate form
+                const fullName = document.getElementById('fullName').value;
+                const email = document.getElementById('email').value;
+                const submissionDate = document.getElementById('submissionDate').value;
+                
+                if (!fullName || !email || !submissionDate) {
+                    alert('Bitte fÃ¼llen Sie alle Felder aus (Name, E-Mail und Datum)');
+                    return;
+                }
+                
+                const selectedSlots = document.querySelectorAll('.time-slot.selected');
+                if (selectedSlots.length === 0) {
+                    alert('Bitte wÃ¤hlen Sie mindestens eine verfÃ¼gbare Zeit aus');
+                    return;
+                }
+                
+                // Format date for display
+                const formattedDate = new Date(submissionDate).toLocaleDateString('de-DE', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                const message = `IRIS VerfÃ¼gbarkeit - ${fullName}\n\nE-Mail: ${email}\n\nDatum der Angabe: ${formattedDate}\n\nVerfÃ¼gbarkeit:\n${getAvailabilityText()}`;
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+                
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // Helper function to get availability as text
+            function getAvailabilityText() {
+                const days = {
+                    'mon': 'Montag',
+                    'tue': 'Dienstag',
+                    'wed': 'Mittwoch',
+                    'thu': 'Donnerstag',
+                    'fri': 'Freitag',
+                    'sat': 'Samstag',
+                    'sun': 'Sonntag'
                 };
-                render();
-            }
-
-            // Enhanced lessons data with better images and audio
-            const lessons = [
-                {
-                    id: 1,
-                    title: "التحيات والعبارات الأساسية",
-                    titleEn: "Greetings & Basic Phrases",
-                    color: "bg-gradient-to-r from-blue-500 to-blue-600",
-                    icon: "👋",
-                    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=400&fit=crop", // Berlin street
-                    bannerImage: "https://images.unsplash.com/photo-1528728329032-2972f65dfb3d?w=800&h=400&fit=crop", // German architecture
-                    description: "تعلم كيفية التحية والتحدث بعبارات أساسية بالألمانية",
-                    descriptionEn: "Learn how to greet and use basic phrases in German",
-                    difficulty: "سهل | Beginner",
-                    duration: "15 دقيقة | 15 min",
-                    audioIntro: audioFiles.greetings.hello,
-                    sections: [
-                        {
-                            type: "introduction",
-                            title: "مقدمة",
-                            content: "في هذا الدرس، ستتعلم التحيات الأساسية والعبارات اليومية الأكثر شيوعًا في اللغة الألمانية، مما يمكنك من بدء محادثات بسيطة وودية.",
-                            image: "https://images.unsplash.com/photo-1528728329032-2972f65dfb3d?w=800&h=400&fit=crop" // German culture
-                        },
-                        {
-                            type: "dialogue",
-                            title: "محادثة في الصباح | Morning Conversation",
-                            audio: audioFiles.greetings.goodMorning,
-                            content: [
-                                {
-                                    speaker: "Thomas",
-                                    text: "Guten Morgen!",
-                                    translation: "صباح الخير!",
-                                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop", // German man
-                                    audio: audioFiles.greetings.goodMorning
-                                },
-                                {
-                                    speaker: "Anna",
-                                    text: "Guten Morgen! Wie geht's?",
-                                    translation: "صباح الخير! كيف حالك؟",
-                                    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop", // German woman
-                                    audio: audioFiles.greetings.hello
-                                }
-                            ]
-                        },
-                        {
-                            type: "vocabulary",
-                            title: "مفردات التحية | Greeting Vocabulary",
-                            items: [
-                                {
-                                    german: "Hallo",
-                                    english: "Hello",
-                                    arabic: "مرحباً",
-                                    image: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=200&h=200&fit=crop", // Handshake
-                                    audio: audioFiles.greetings.hello
-                                },
-                                {
-                                    german: "Guten Tag",
-                                    english: "Good day",
-                                    arabic: "نهارك سعيد",
-                                    image: "https://images.unsplash.com/photo-1541178735493-479c1a27ed24?w=200&h=200&fit=crop", // Sunny day
-                                    audio: audioFiles.greetings.hello
-                                }
-                            ]
-                        }
-                    ],
-                    exercises: [
-                        {
-                            type: "listening",
-                            german: "Guten Morgen",
-                            english: "Good morning",
-                            instruction: "استمع واختر الترجمة الصحيحة | Listen and choose the correct translation",
-                            audio: audioFiles.greetings.goodMorning,
-                            image: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=300&h=300&fit=crop", // Morning sun
-                            options: ["صباح الخير", "مساء الخير", "ليلة سعيدة", "وداعاً"],
-                            correctAnswer: "صباح الخير",
-                            explanation: "تستخدم 'Guten Morgen' لتحية الصباح حتى حوالي الساعة العاشرة."
-                        }
-                    ]
-                },
-                {
-                    id: 2,
-                    title: "الأرقام والوقت",
-                    titleEn: "Numbers & Time",
-                    color: "bg-gradient-to-r from-green-500 to-green-600",
-                    icon: "🕐",
-                    image: "https://images.unsplash.com/photo-1501139083538-0139583c060f?w=800&h=400&fit=crop", // Clock tower
-                    bannerImage: "https://images.unsplash.com/photo-1510511459019-5efa74f9e421?w=800&h=400&fit=crop", // Numbers
-                    description: "تعلم الأرقام وكيفية السؤال عن الوقت بالألمانية",
-                    descriptionEn: "Learn numbers and how to tell time in German",
-                    difficulty: "متوسط | Intermediate",
-                    duration: "20 دقيقة | 20 min",
-                    audioIntro: audioFiles.pageTurn,
-                    sections: [
-                        {
-                            type: "numbers",
-                            title: "الأرقام من 1 إلى 10 | Numbers 1-10",
-                            audio: audioFiles.numbers.one,
-                            items: [
-                                { number: 1, german: "eins", arabic: "واحد", audio: audioFiles.numbers.one },
-                                { number: 2, german: "zwei", arabic: "اثنان", audio: audioFiles.numbers.two },
-                                { number: 3, german: "drei", arabic: "ثلاثة", audio: audioFiles.numbers.three }
-                            ]
-                        }
-                    ],
-                    exercises: [
-                        {
-                            type: "listening",
-                            german: "eins",
-                            english: "one",
-                            instruction: "استمع واختر الرقم الصحيح | Listen and choose the correct number",
-                            audio: audioFiles.numbers.one,
-                            image: "https://images.unsplash.com/photo-1589254065878-42a9da063a25?w=300&h=300&fit=crop", // Number 1
-                            options: ["1", "2", "3", "4"],
-                            correctAnswer: "1",
-                            explanation: "eins تعني واحد بالألمانية"
-                        }
-                    ]
-                }
-            ];
-
-            // Vocabulary categories with improved images
-            const vocabularyCategories = [
-                {
-                    id: 1,
-                    name: "التحيات",
-                    nameEn: "Greetings",
-                    color: "bg-blue-500",
-                    icon: "👋",
-                    cards: [
-                        {
-                            german: "Hallo",
-                            english: "Hello",
-                            arabic: "مرحباً",
-                            image: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=200&h=200&fit=crop", // Handshake
-                            audio: audioFiles.greetings.hello
-                        },
-                        {
-                            german: "Guten Morgen",
-                            english: "Good morning",
-                            arabic: "صباح الخير",
-                            image: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=200&h=200&fit=crop", // Morning sun
-                            audio: audioFiles.greetings.goodMorning
-                        }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: "الأرقام",
-                    nameEn: "Numbers",
-                    color: "bg-green-500",
-                    icon: "🔢",
-                    cards: [
-                        {
-                            german: "eins",
-                            english: "one",
-                            arabic: "واحد",
-                            image: "https://images.unsplash.com/photo-1589254065878-42a9da063a25?w=200&h=200&fit=crop", // Number 1
-                            audio: audioFiles.numbers.one
-                        },
-                        {
-                            german: "zwei",
-                            english: "two",
-                            arabic: "اثنان",
-                            image: "https://images.unsplash.com/photo-1589254066214-7d72a0b8b5c5?w=200&h=200&fit=crop", // Number 2
-                            audio: audioFiles.numbers.two
-                        }
-                    ]
-                }
-            ];
-
-            // App state remains the same
-            let state = {
-                currentView: "home",
-                currentLesson: 0,
-                currentSection: 0,
-                currentExercise: 0,
-                score: 0,
-                selectedAnswer: "",
-                showResult: false,
-                isPlaying: false,
-                showVocabCard: false,
-                completedLessons: [],
-                userAnswers: {},
-                currentVocabCategory: 1
-            };
-
-            // Render functions remain the same as in your original code
-            function render() {
-                switch(state.currentView) {
-                    case "home": renderHome(); break;
-                    case "lesson": renderLesson(); break;
-                    case "exercise": renderExercise(); break;
-                    case "vocabulary": renderVocabulary(); break;
-                    default: renderHome();
-                }
-            }
-
-            function renderHome() {
-                const progressPercentage = (state.completedLessons.length / lessons.length) * 100;
                 
-                app.innerHTML = `
-                    <div class="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
-                        <div class="absolute inset-0 bg-black opacity-30"></div>
-                        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                            <h1 class="text-5xl md:text-6xl font-bold mb-6">
-                                🇩🇪 تعلم الألمانية بطريقة ممتعة 🇸🇦
-                            </h1>
-                            <p class="text-xl md:text-2xl mb-8">
-                                دورات تفاعلية مع صور، أصوات وتمارين مسلية
-                            </p>
-                            <div class="flex flex-wrap justify-center gap-4">
-                                <button onclick="startLearning()" class="bg-white text-blue-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-50 transition-all shadow-lg hover:scale-105">
-                                    ابدأ التعلم الآن 🚀
-                                </button>
-                                <button onclick="setView('vocabulary')" class="bg-purple-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-purple-600 transition-all shadow-lg hover:scale-105">
-                                    تعلم المفردات 📖
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                const availabilityByDay = {};
+                
+                // Group selected slots by day
+                document.querySelectorAll('.time-slot.selected').forEach(slot => {
+                    const day = slot.getAttribute('data-day');
+                    const time = slot.getAttribute('data-time');
                     
-                    <div class="max-w-7xl mx-auto px-4 py-12">
-                        <div class="bg-white rounded-2xl shadow-xl p-8">
-                            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">
-                                تقدمك في التعلم
-                            </h2>
-                            <div class="flex flex-col items-center">
-                                <div class="relative w-40 h-40 mb-6">
-                                    <svg class="w-full h-full" viewBox="0 0 100 100">
-                                        <circle class="text-gray-200" stroke-width="8" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
-                                        <circle class="text-blue-500" stroke-width="8" stroke-dasharray="${2 * Math.PI * 40}" stroke-dashoffset="${2 * Math.PI * 40 - (progressPercentage / 100 * (2 * Math.PI * 40))}" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
-                                    </svg>
-                                    <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                                        <span class="text-3xl font-bold">${Math.round(progressPercentage)}%</span>
-                                    </div>
-                                </div>
-                                <p class="text-lg text-gray-600 mb-6">
-                                    ${state.completedLessons.length} من ${lessons.length} دروس مكتملة
-                                </p>
-                                <button onclick="continueLearning()" class="bg-blue-500 text-white px-6 py-3 rounded-full font-medium hover:bg-blue-600 transition-all shadow-lg ${state.completedLessons.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}">
-                                    واصل التعلم من حيث توقفت
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="max-w-7xl mx-auto px-4 py-12">
-                        <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">
-                            دوراتنا التعليمية
-                        </h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            ${lessons.map((lesson, index) => `
-                            <div onclick="startLesson(${index})" class="lesson-card bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300 cursor-pointer hover:shadow-xl">
-                                <div class="h-48 bg-cover bg-center relative" style="background-image: url(${lesson.image})">
-                                    <div class="absolute inset-0 ${lesson.color} bg-opacity-70 flex items-center justify-center">
-                                        <span class="text-6xl">${lesson.icon}</span>
-                                    </div>
-                                    ${state.completedLessons.includes(lesson.id) ? `
-                                    <div class="absolute top-4 right-4 bg-green-500 text-white rounded-full p-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </div>
-                                    ` : ''}
-                                </div>
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-gray-800 mb-2">${lesson.title}</h3>
-                                    <p class="text-gray-600 mb-4">${lesson.description}</p>
-                                    <div class="flex justify-between items-center text-sm text-gray-500">
-                                        <span>${lesson.difficulty}</span>
-                                        <span>${lesson.duration}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gray-50 py-16">
-                        <div class="max-w-7xl mx-auto px-4">
-                            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">
-                                لماذا تتعلم معنا؟
-                            </h2>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                <div class="bg-white p-8 rounded-xl shadow-md text-center">
-                                    <div class="text-5xl mb-4">🎧</div>
-                                    <h3 class="text-xl font-bold mb-3">تعلم بالنطق الصحيح</h3>
-                                    <p class="text-gray-600">استمع إلى نطق الكلمات من متحدثين أصليين</p>
-                                </div>
-                                <div class="bg-white p-8 rounded-xl shadow-md text-center">
-                                    <div class="text-5xl mb-4">🖼️</div>
-                                    <h3 class="text-xl font-bold mb-3">تعلم بالصور</h3>
-                                    <p class="text-gray-600">ربط الكلمات بالصور لتحسين التذكر</p>
-                                </div>
-                                <div class="bg-white p-8 rounded-xl shadow-md text-center">
-                                    <div class="text-5xl mb-4">🎮</div>
-                                    <h3 class="text-xl font-bold mb-3">تمارين تفاعلية</h3>
-                                    <p class="text-gray-600">تعلم من خلال الألعاب والتمارين المسلية</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function renderLesson() {
-                const lesson = lessons[state.currentLesson];
-                const section = lesson.sections[state.currentSection];
-                
-                app.innerHTML = `
-                    <div class="relative h-64 bg-cover bg-center" style="background-image: url(${lesson.bannerImage})">
-                        <div class="absolute inset-0 ${lesson.color} bg-opacity-80"></div>
-                        <div class="relative max-w-7xl mx-auto px-4 py-12 flex flex-col h-full justify-center">
-                            <button onclick="setView('home')" class="absolute top-4 right-4 bg-white bg-opacity-20 text-white p-2 rounded-full hover:bg-opacity-30 transition-all">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                </svg>
-                            </button>
-                            <div class="text-center text-white">
-                                <h1 class="text-4xl font-bold mb-2">${lesson.title}</h1>
-                                <p class="text-xl opacity-90 mb-6">${lesson.titleEn}</p>
-                                <div class="flex justify-center gap-4">
-                                    <span class="bg-white bg-opacity-20 rounded-full px-4 py-1">${lesson.difficulty}</span>
-                                    <span class="bg-white bg-opacity-20 rounded-full px-4 py-1">${lesson.duration}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="max-w-7xl mx-auto px-4 py-6">
-                        <div class="flex overflow-x-auto pb-4">
-                            ${lesson.sections.map((sec, index) => `
-                            <div onclick="setSection(${index})" class="flex-shrink-0 flex flex-col items-center mx-2 cursor-pointer">
-                                <div class="w-12 h-12 rounded-full flex items-center justify-center ${index <= state.currentSection ? lesson.color + ' text-white' : 'bg-gray-200 text-gray-500'}">
-                                    ${index + 1}
-                                </div>
-                                <span class="text-sm mt-2 ${index <= state.currentSection ? 'text-gray-800 font-medium' : 'text-gray-500'}">${sec.title}</span>
-                            </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                    
-                    <div class="max-w-4xl mx-auto px-4 py-8">
-                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                            <div class="p-8">
-                                <h2 class="text-2xl font-bold text-gray-800 mb-6">${section.title}</h2>
-                                
-                                ${section.type === "introduction" ? `
-                                <div class="bg-blue-50 rounded-xl p-6 mb-6">
-                                    <div class="flex items-start gap-4">
-                                        <div class="text-blue-500 text-2xl">💡</div>
-                                        <div class="prose" style="max-width: 100%">${section.content}</div>
-                                    </div>
-                                </div>
-                                ${section.image ? `<img src="${section.image}" class="w-full rounded-xl mb-6">` : ''}
-                                ` : ''}
-
-                                ${section.type === "dialogue" ? `
-                                <div class="space-y-6">
-                                    ${section.content.map((line, i) => `
-                                    <div class="flex gap-4 items-start p-4 rounded-lg bg-gray-50">
-                                        <img src="${line.image}" class="w-16 h-16 rounded-full object-cover">
-                                        <div>
-                                            <div class="font-bold text-gray-700">${line.speaker}</div>
-                                            <div class="text-xl my-2">${line.text}</div>
-                                            <div class="text-blue-600 font-medium">${line.translation}</div>
-                                        </div>
-                                        <button onclick="playSound('greetings', ${line.text.includes('Morgen') ? 'goodMorning' : 'hello'})" class="ml-auto bg-blue-100 text-blue-600 p-3 rounded-full hover:bg-blue-200 transition-all">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 012.728-2.728" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    `).join('')}
-                                </div>
-                                ` : ''}
-                                
-                                ${section.type === "vocabulary" ? `
-                                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                    ${section.items.map((item, i) => `
-                                    <div class="bg-gray-50 rounded-xl p-4 text-center">
-                                        <div class="text-4xl mb-3">
-                                            ${item.image.startsWith('http') ? `<img src="${item.image}" class="w-20 h-20 mx-auto mb-2 rounded-lg object-cover">` : item.image}
-                                        </div>
-                                        <div class="text-xl font-bold text-gray-800">${item.german}</div>
-                                        <div class="text-gray-600">${item.english}</div>
-                                        <div class="text-blue-600 font-medium mt-2">${item.arabic}</div>
-                                        <button onclick="playSound('greetings', ${item.german.includes('Morgen') ? 'goodMorning' : 'hello'})" class="mt-3 bg-blue-100 text-blue-600 p-2 rounded-full hover:bg-blue-200 transition-all">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 012.728-2.728" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    `).join('')}
-                                </div>
-                                ` : ''}
-                                
-                                ${section.type === "numbers" ? `
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    ${section.items.map(num => `
-                                    <div class="bg-gray-50 rounded-xl p-4 text-center">
-                                        <div class="text-3xl font-bold text-gray-800">${num.number}</div>
-                                        <div class="text-xl my-2">${num.german}</div>
-                                        <div class="text-blue-600 font-medium">${num.arabic}</div>
-                                        <button onclick="playSound('numbers', ${num.german === 'eins' ? 'one' : num.german === 'zwei' ? 'two' : 'three'})" class="mt-3 bg-blue-100 text-blue-600 p-2 rounded-full hover:bg-blue-200 transition-all">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 012.728-2.728" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    `).join('')}
-                                </div>
-                                <button onclick="playSound('numbers', 'one')" class="mt-6 bg-blue-500 text-white px-6 py-3 rounded-full font-medium hover:bg-blue-600 transition-all shadow-lg">
-                                    استمع للأرقام 🔊
-                                </button>
-                                ` : ''}
-                            </div>
-                            
-                            <div class="bg-gray-50 p-6 flex justify-between">
-                                ${state.currentSection > 0 ? `
-                                <button onclick="previousSection()" class="bg-white text-gray-700 px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-lg flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                    </svg>
-                                    السابق
-                                </button>
-                                ` : '<div></div>'}
-                                
-                                <button onclick="nextSection()" class="bg-blue-500 text-white px-6 py-3 rounded-full font-medium hover:bg-blue-600 transition-all shadow-lg flex items-center gap-2">
-                                    ${state.currentSection < lesson.sections.length - 1 ? 'التالي' : 'ابدأ التمارين'}
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function renderExercise() {
-                const lesson = lessons[state.currentLesson];
-                const exercise = lesson.exercises[state.currentExercise];
-                
-                app.innerHTML = `
-                    <div class="relative h-48 bg-cover bg-center" style="background-image: url(${lesson.bannerImage})">
-                        <div class="absolute inset-0 ${lesson.color} bg-opacity-80"></div>
-                        <div class="relative max-w-7xl mx-auto px-4 py-8 flex flex-col h-full justify-center">
-                            <div class="text-center text-white">
-                                <h1 class="text-3xl font-bold mb-2">${lesson.title}</h1>
-                                <p class="text-lg opacity-90">تمرين ${state.currentExercise + 1} من ${lesson.exercises.length}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="max-w-4xl mx-auto px-4 py-8">
-                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                            <div class="p-8">
-                                <div class="flex justify-between items-center mb-6">
-                                    <h2 class="text-xl font-bold text-gray-800">${exercise.instruction}</h2>
-                                    <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">
-                                        ${exercise.type === "listening" ? "الاستماع" : exercise.type === "translation" ? "الترجمة" : exercise.type === "matching" ? "المطابقة" : "إملأ الفراغ"}
-                                    </span>
-                                </div>
-                                
-                                ${exercise.image ? `
-                                <div class="flex justify-center mb-6">
-                                    <img src="${exercise.image}" class="rounded-xl h-48 object-cover">
-                                </div>
-                                ` : ''}
-                                
-                                <div class="text-center mb-8">
-                                    <div class="flex items-center justify-center gap-4 mb-4">
-                                        <h3 class="text-3xl font-bold text-gray-800">
-                                            ${exercise.questionPrefix ? exercise.questionPrefix : ''}
-                                            ${exercise.german ? exercise.german : ''}
-                                            ${exercise.questionSuffix ? exercise.questionSuffix : ''}
-                                        </h3>
-                                        ${exercise.audio ? `
-                                        <button onclick="playSound('${exercise.type === 'listening' && exercise.german.includes('Morgen') ? 'greetings' : 'numbers'}, ${exercise.german.includes('Morgen') ? 'goodMorning' : exercise.german.includes('eins') ? 'one' : 'two'})" class="p-4 rounded-full transition-all shadow-lg ${
-                                            currentAudio && !currentAudio.paused ? "bg-red-500 text-white pulse" : "bg-blue-500 text-white hover:bg-blue-600 hover:scale-110"
-                                        }">
-                                            ${currentAudio && !currentAudio.paused ? "⏸️" : "🔊"}
-                                        </button>
-                                        ` : ''}
-                                    </div>
-                                    <p class="text-xl text-gray-600">${exercise.english}</p>
-                                </div>
-                                
-                                ${exercise.type === "listening" || exercise.type === "translation" ? `
-                                <div class="space-y-4 mb-8">
-                                    ${exercise.options.map((option, index) => `
-                                    <button onclick="${!state.showResult ? `checkAnswer('${option}')` : ''}" class="w-full p-6 text-right rounded-xl border-2 transition-all text-xl shadow-md ${
-                                        state.showResult
-                                            ? option === exercise.correctAnswer
-                                                ? "border-green-500 bg-green-50 text-green-700 shadow-green-200"
-                                                : option === state.selectedAnswer && option !== exercise.correctAnswer
-                                                ? "border-red-500 bg-red-50 text-red-700 shadow-red-200"
-                                                : "border-gray-200 bg-gray-50 text-gray-500"
-                                            : "border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer hover:shadow-lg hover:scale-102"
-                                    }">
-                                        <div class="flex justify-between items-center">
-                                            <div>
-                                                ${state.showResult && option === exercise.correctAnswer ? "✅" : ''}
-                                                ${state.showResult && option === state.selectedAnswer && option !== exercise.correctAnswer ? "❌" : ''}
-                                            </div>
-                                            <div>${option}</div>
-                                        </div>
-                                    </button>
-                                    `).join('')}
-                                </div>
-                                ` : ''}
-                                
-                                ${state.showResult ? `
-                                <div class="bg-blue-50 p-6 rounded-xl mb-6">
-                                    <h4 class="font-bold text-blue-800 mb-2">📝 الشرح:</h4>
-                                    <p class="text-blue-700">${exercise.explanation}</p>
-                                </div>
-                                ` : ''}
-                            </div>
-                            
-                            <div class="bg-gray-50 p-6 flex justify-between">
-                                ${state.currentExercise > 0 ? `
-                                <button onclick="previousExercise()" class="bg-white text-gray-700 px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-lg flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                    </svg>
-                                    السابق
-                                </button>
-                                ` : '<div></div>'}
-                                
-                                <button onclick="${state.showResult ? 'nextExercise()' : 'submitExercise()'}" class="bg-blue-500 text-white px-6 py-3 rounded-full font-medium hover:bg-blue-600 transition-all shadow-lg flex items-center gap-2">
-                                    ${state.showResult ? 
-                                        (state.currentExercise < lesson.exercises.length - 1 ? 'التالي' : 'إنهاء الدرس') 
-                                        : 'تحقق من الإجابة'}
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function renderVocabulary() {
-                app.innerHTML = `
-                    <div class="relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-16">
-                        <div class="absolute inset-0 bg-black opacity-20"></div>
-                        <div class="relative max-w-7xl mx-auto px-4 text-center">
-                            <button onclick="setView('home')" class="absolute top-4 right-4 bg-white bg-opacity-20 text-white p-2 rounded-full hover:bg-opacity-30 transition-all">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                </svg>
-                            </button>
-                            <h1 class="text-4xl font-bold mb-4">المفردات الألمانية</h1>
-                            <p class="text-xl opacity-90">تعلم الكلمات الأساسية وتذكرها بسهولة</p>
-                        </div>
-                    </div>
-                    
-                    <div class="max-w-7xl mx-auto px-4 py-12">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            ${vocabularyCategories.map(category => `
-                            <div onclick="showVocabCards(${category.id})" class="bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer transition-all hover:shadow-2xl hover:-translate-y-1">
-                                <div class="h-48 ${category.color} flex items-center justify-center text-white text-7xl">
-                                    ${category.icon}
-                                </div>
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-gray-800 mb-2">${category.name}</h3>
-                                    <p class="text-gray-600">${category.nameEn}</p>
-                                    <div class="mt-4 text-sm text-gray-500">
-                                        ${category.cards.length} كلمة
-                                    </div>
-                                </div>
-                            </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                    
-                    ${state.showVocabCard ? `
-                    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-                            <div class="p-6">
-                                <div class="flex justify-between items-center mb-6">
-                                    <h3 class="text-xl font-bold text-gray-800">${vocabularyCategories.find(c => c.id === state.currentVocabCategory).name}</h3>
-                                    <button onclick="hideVocabCards()" class="text-gray-500 hover:text-gray-700">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                
-                                <div class="space-y-4">
-                                    ${vocabularyCategories.find(c => c.id === state.currentVocabCategory).cards.map((card, index) => `
-                                    <div class="bg-gray-50 rounded-xl p-6">
-                                        <div class="flex items-center justify-between mb-4">
-                                            <div class="text-3xl font-bold">${card.german}</div>
-                                            <button onclick="playSound('${card.german.includes('Morgen') ? 'greetings' : 'numbers'}, ${card.german.includes('Morgen') ? 'goodMorning' : card.german.includes('eins') ? 'one' : 'two'})" class="p-3 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-all">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 012.728-2.728" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        
-                                        <div class="flex items-center gap-4">
-                                            ${card.image ? `<img src="${card.image}" class="w-20 h-20 rounded-lg object-cover">` : ''}
-                                            <div>
-                                                <div class="text-gray-600">${card.english}</div>
-                                                <div class="text-blue-600 font-medium mt-1">${card.arabic}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    ` : ''}
-                `;
-            }
-
-            // Helper functions
-            function setView(view) {
-                state.currentView = view;
-                state.showResult = false;
-                state.selectedAnswer = "";
-                state.userAnswers = {};
-                playSound('pageTurn');
-                render();
-            }
-            
-            function startLearning() {
-                state.currentLesson = 0;
-                state.currentSection = 0;
-                state.currentExercise = 0;
-                setView('lesson');
-            }
-            
-            function continueLearning() {
-                if (state.completedLessons.length === 0) {
-                    startLearning();
-                    return;
-                }
-                
-                const nextLessonIndex = lessons.findIndex(lesson => !state.completedLessons.includes(lesson.id));
-                if (nextLessonIndex !== -1) {
-                    state.currentLesson = nextLessonIndex;
-                    state.currentSection = 0;
-                    state.currentExercise = 0;
-                    setView('lesson');
-                } else {
-                    setView('home');
-                    alert("تهانينا! لقد أكملت جميع الدروس!");
-                }
-            }
-            
-            function startLesson(index) {
-                state.currentLesson = index;
-                state.currentSection = 0;
-                state.currentExercise = 0;
-                setView('lesson');
-            }
-            
-            function setSection(index) {
-                if (index <= state.currentSection) {
-                    state.currentSection = index;
-                    playSound('pageTurn');
-                    render();
-                } else {
-                    alert("الرجاء إكمال الأقسام السابقة قبل الانتقال إلى هذا القسم.");
-                }
-            }
-            
-            function nextSection() {
-                const lesson = lessons[state.currentLesson];
-                
-                if (state.currentSection < lesson.sections.length - 1) {
-                    state.currentSection++;
-                    playSound('pageTurn');
-                } else {
-                    state.currentExercise = 0;
-                    setView('exercise');
-                }
-                
-                render();
-            }
-            
-            function previousSection() {
-                if (state.currentSection > 0) {
-                    state.currentSection--;
-                    playSound('pageTurn');
-                    render();
-                } else {
-                    setView('home');
-                }
-            }
-            
-            function checkAnswer(answer) {
-                state.selectedAnswer = answer;
-                const exercise = lessons[state.currentLesson].exercises[state.currentExercise];
-                
-                if (answer === exercise.correctAnswer) {
-                    playSound('correct');
-                    state.score += 10;
-                } else {
-                    playSound('wrong');
-                }
-                
-                state.showResult = true;
-                render();
-            }
-
-            function submitExercise() {
-                const lesson = lessons[state.currentLesson];
-                const exercise = lesson.exercises[state.currentExercise];
-                let isCorrect = (state.selectedAnswer === exercise.correctAnswer);
-
-                if (isCorrect) {
-                    playSound('correct');
-                    state.score += 10;
-                } else {
-                    playSound('wrong');
-                }
-
-                state.showResult = true;
-                render();
-            }
-
-            function nextExercise() {
-                const lesson = lessons[state.currentLesson];
-                
-                if (state.currentExercise < lesson.exercises.length - 1) {
-                    state.currentExercise++;
-                    state.showResult = false;
-                    state.selectedAnswer = "";
-                    state.userAnswers = {};
-                    playSound('pageTurn');
-                } else {
-                    if (!state.completedLessons.includes(lesson.id)) {
-                        state.completedLessons.push(lesson.id);
-                        playSound('success');
+                    if (!availabilityByDay[day]) {
+                        availabilityByDay[day] = [];
                     }
-                    setView('home');
-                    return;
+                    
+                    availabilityByDay[day].push(time.replace('-', ':00-') + ':00');
+                });
+                
+                // Build text output
+                let output = '';
+                
+                for (const [dayCode, times] of Object.entries(availabilityByDay)) {
+                    output += `â€¢ ${days[dayCode]}: ${times.join(', ')}\n`;
                 }
                 
-                render();
+                return output;
             }
-            
-            function previousExercise() {
-                if (state.currentExercise > 0) {
-                    state.currentExercise--;
-                    state.showResult = false;
-                    state.selectedAnswer = "";
-                    state.userAnswers = {};
-                    playSound('pageTurn');
-                    render();
-                } else {
-                    state.currentSection = lessons[state.currentLesson].sections.length - 1;
-                    setView('lesson');
-                }
-            }
-            
-            function showVocabCards(categoryId) {
-                state.currentVocabCategory = categoryId;
-                state.showVocabCard = true;
-                playSound('pageTurn');
-                render();
-            }
-            
-            function hideVocabCards() {
-                state.showVocabCard = false;
-                playSound('pageTurn');
-                render();
-            }
-            
-            // Make functions available globally
-            window.setView = setView;
-            window.startLearning = startLearning;
-            window.continueLearning = continueLearning;
-            window.startLesson = startLesson;
-            window.setSection = setSection;
-            window.nextSection = nextSection;
-            window.previousSection = previousSection;
-            window.checkAnswer = checkAnswer;
-            window.submitExercise = submitExercise;
-            window.nextExercise = nextExercise;
-            window.previousExercise = previousExercise;
-            window.playSound = playSound;
-            window.showVocabCards = showVocabCards;
-            window.hideVocabCards = hideVocabCards;
-
-            // Initial render
-            render();
         });
     </script>
 </body>
