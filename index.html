@@ -1,544 +1,345 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRIS Language Academy - Lehrer VerfÃ¼gbarkeit</title>
-    <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --whatsapp-color: #25D366;
-            --dark-color: #2c3e50;
-            --light-color: #f5f5f5;
-            --border-color: #ddd;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: var(--light-color);
-        }
-        
-        h1, h2 {
-            color: var(--dark-color);
-            margin-top: 0;
-        }
-        
-        h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
-        }
-        
-        h2 {
-            font-size: 22px;
-            margin: 25px 0 15px 0;
-        }
-        
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark-color);
-        }
-        
-        input[type="text"], 
-        input[type="email"],
-        input[type="date"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
-            transition: border 0.3s;
-        }
-        
-        input[type="text"]:focus, 
-        input[type="email"]:focus,
-        input[type="date"]:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
-        
-        .availability-grid {
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            gap: 8px;
-            margin-top: 20px;
-        }
-        
-        .time-slot {
-            padding: 10px;
-            text-align: center;
-            background-color: #f8f9fa;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 14px;
-            border: 1px solid var(--border-color);
-        }
-        
-        .time-slot:hover {
-            background-color: #e9ecef;
-        }
-        
-        .time-slot.selected {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        
-        .day-header {
-            grid-column: span 8;
-            font-weight: bold;
-            margin-top: 20px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--border-color);
-            color: var(--dark-color);
-            font-size: 18px;
-        }
-        
-        .time-header {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--dark-color);
-            padding: 8px 0;
-        }
-        
-        button {
-            border: none;
-            padding: 14px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 25px;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-        
-        .instructions {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-left: 5px solid var(--primary-color);
-            margin-bottom: 30px;
-            border-radius: 0 6px 6px 0;
-        }
-        
-        .instructions ul {
-            padding-left: 20px;
-        }
-        
-        .instructions li {
-            margin-bottom: 8px;
-        }
-        
-        .print-btn {
-            background-color: var(--dark-color);
-            color: white;
-            margin-right: 15px;
-        }
-        
-        .print-btn:hover {
-            background-color: #1a252f;
-        }
-        
-        .whatsapp-btn {
-            background-color: var(--whatsapp-color);
-            color: white;
-        }
-        
-        .whatsapp-btn:hover {
-            background-color: #128C7E;
-        }
-        
-        .button-group {
-            display: flex;
-            justify-content: flex-start;
-            margin-top: 30px;
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .form-row .form-group {
-            flex: 1;
-        }
-        
-        @media print {
-            body, .container {
-                background-color: white;
-                box-shadow: none;
-                padding: 0;
-                max-width: 100%;
-            }
-            
-            button {
-                display: none;
-            }
-            
-            .instructions {
-                display: none;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .availability-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            
-            .day-header {
-                grid-column: span 4;
-            }
-            
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-            
-            .button-group {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .print-btn {
-                margin-right: 0;
-                margin-bottom: 10px;
-            }
-        }
-        
-        /* Animation for selected time slots */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .time-slot.selected {
-            animation: pulse 0.3s ease;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IRIS Language Academy – Lehrer Verfügbarkeit</title>
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2ecc71;
+      --whatsapp-color: #25D366;
+      --dark-color: #2c3e50;
+      --light-color: #f5f5f5;
+      --border-color: #ddd;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: var(--light-color);
+    }
+
+    h1, h2 {
+      color: var(--dark-color);
+    }
+
+    h1 {
+      font-size: 28px;
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin: 25px 0 15px;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+
+    input[type="text"], 
+    input[type="email"],
+    input[type="date"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    .availability-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .time-slot {
+      padding: 10px;
+      text-align: center;
+      background-color: #f8f9fa;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      border: 1px solid var(--border-color);
+    }
+
+    .time-slot:hover {
+      background-color: #e9ecef;
+    }
+
+    .time-slot.selected {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+      animation: pulse 0.3s ease;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .day-header {
+      grid-column: span 8;
+      font-weight: bold;
+      font-size: 18px;
+      color: var(--dark-color);
+      margin-top: 20px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    .time-header {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark-color);
+      padding: 8px 0;
+    }
+
+    button {
+      border: none;
+      padding: 14px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 25px;
+      font-weight: 600;
+    }
+
+    .instructions {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-left: 5px solid var(--primary-color);
+      margin-bottom: 30px;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .instructions ul {
+      padding-left: 20px;
+    }
+
+    .instructions li {
+      margin-bottom: 8px;
+    }
+
+    .print-btn {
+      background-color: var(--dark-color);
+      color: white;
+      margin-right: 15px;
+    }
+
+    .print-btn:hover {
+      background-color: #1a252f;
+    }
+
+    .whatsapp-btn {
+      background-color: var(--whatsapp-color);
+      color: white;
+    }
+
+    .whatsapp-btn:hover {
+      background-color: #128C7E;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 30px;
+      gap: 15px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    @media print {
+      button, .instructions {
+        display: none;
+      }
+
+      body, .container {
+        background: white;
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .availability-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .day-header {
+        grid-column: span 4;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>IRIS Language Academy - VerfÃ¼gbarkeit melden</h1>
-        
-        <div class="instructions">
-            <h2>Liebe LehrkrÃ¤fte,</h2>
-            <p>Vielen Dank, dass Sie Ihre VerfÃ¼gbarkeit fÃ¼r den Unterricht eintragen. Bitte beachten Sie folgende Hinweise:</p>
-            <ul>
-                <li>Tragen Sie bitte Ihren vollstÃ¤ndigen Namen, Ihre Kontaktdaten und das heutige Datum ein</li>
-                <li>WÃ¤hlen Sie alle Zeiten aus, in denen Sie grundsÃ¤tzlich verfÃ¼gbar sind</li>
-                <li>Je mehr VerfÃ¼gbarkeit Sie angeben, desto mehr Unterrichtsstunden kÃ¶nnen wir Ihnen zuweisen</li>
-                <li>Bitte denken Sie daran, Pausen und Vorbereitungszeit einzuplanen</li>
-                <li>Nach dem AuswÃ¤hlen kÃ¶nnen Sie Ihren Zeitplan ausdrucken oder direkt an die Administration senden</li>
-            </ul>
-            <p><strong>Bitte geben Sie mÃ¶glichst viele verfÃ¼gbare Zeiten an, um Ihre Chancen auf Unterrichtsstunden zu erhÃ¶hen!</strong></p>
-        </div>
-
-        <form id="availabilityForm">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="fullName">VollstÃ¤ndiger Name:</label>
-                    <input type="text" id="fullName" name="fullName" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">E-Mail:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="submissionDate">Datum der Angabe:</label>
-                    <input type="date" id="submissionDate" name="submissionDate" required>
-                </div>
-            </div>
-            
-            <h2>Ihre VerfÃ¼gbarkeit</h2>
-            <p>Bitte wÃ¤hlen Sie alle Zeiten aus, in denen Sie verfÃ¼gbar sind:</p>
-            
-            <div class="availability-grid" id="availabilityGrid">
-                <!-- Montag -->
-                <div class="day-header">Montag</div>
-                <div class="time-header">08:00-10:00</div>
-                <div class="time-header">10:00-12:00</div>
-                <div class="time-header">12:00-14:00</div>
-                <div class="time-header">14:00-16:00</div>
-                <div class="time-header">16:00-18:00</div>
-                <div class="time-header">18:00-20:00</div>
-                <div class="time-header">20:00-22:00</div>
-                
-                <div class="time-slot" data-day="mon" data-time="8-10"></div>
-                <div class="time-slot" data-day="mon" data-time="10-12"></div>
-                <div class="time-slot" data-day="mon" data-time="12-14"></div>
-                <div class="time-slot" data-day="mon" data-time="14-16"></div>
-                <div class="time-slot" data-day="mon" data-time="16-18"></div>
-                <div class="time-slot" data-day="mon" data-time="18-20"></div>
-                <div class="time-slot" data-day="mon" data-time="20-22"></div>
-                
-                <!-- Dienstag -->
-                <div class="day-header">Dienstag</div>
-                <div class="time-header">08:00-10:00</div>
-                <div class="time-header">10:00-12:00</div>
-                <div class="time-header">12:00-14:00</div>
-                <div class="time-header">14:00-16:00</div>
-                <div class="time-header">16:00-18:00</div>
-                <div class="time-header">18:00-20:00</div>
-                <div class="time-header">20:00-22:00</div>
-                
-                <div class="time-slot" data-day="tue" data-time="8-10"></div>
-                <div class="time-slot" data-day="tue" data-time="10-12"></div>
-                <div class="time-slot" data-day="tue" data-time="12-14"></div>
-                <div class="time-slot" data-day="tue" data-time="14-16"></div>
-                <div class="time-slot" data-day="tue" data-time="16-18"></div>
-                <div class="time-slot" data-day="tue" data-time="18-20"></div>
-                <div class="time-slot" data-day="tue" data-time="20-22"></div>
-                
-                <!-- Mittwoch -->
-                <div class="day-header">Mittwoch</div>
-                <div class="time-header">08:00-10:00</div>
-                <div class="time-header">10:00-12:00</div>
-                <div class="time-header">12:00-14:00</div>
-                <div class="time-header">14:00-16:00</div>
-                <div class="time-header">16:00-18:00</div>
-                <div class="time-header">18:00-20:00</div>
-                <div class="time-header">20:00-22:00</div>
-                
-                <div class="time-slot" data-day="wed" data-time="8-10"></div>
-                <div class="time-slot" data-day="wed" data-time="10-12"></div>
-                <div class="time-slot" data-day="wed" data-time="12-14"></div>
-                <div class="time-slot" data-day="wed" data-time="14-16"></div>
-                <div class="time-slot" data-day="wed" data-time="16-18"></div>
-                <div class="time-slot" data-day="wed" data-time="18-20"></div>
-                <div class="time-slot" data-day="wed" data-time="20-22"></div>
-                
-                <!-- Donnerstag -->
-                <div class="day-header">Donnerstag</div>
-                <div class="time-header">08:00-10:00</div>
-                <div class="time-header">10:00-12:00</div>
-                <div class="time-header">12:00-14:00</div>
-                <div class="time-header">14:00-16:00</div>
-                <div class="time-header">16:00-18:00</div>
-                <div class="time-header">18:00-20:00</div>
-                <div class="time-header">20:00-22:00</div>
-                
-                <div class="time-slot" data-day="thu" data-time="8-10"></div>
-                <div class="time-slot" data-day="thu" data-time="10-12"></div>
-                <div class="time-slot" data-day="thu" data-time="12-14"></div>
-                <div class="time-slot" data-day="thu" data-time="14-16"></div>
-                <div class="time-slot" data-day="thu" data-time="16-18"></div>
-                <div class="time-slot" data-day="thu" data-time="18-20"></div>
-                <div class="time-slot" data-day="thu" data-time="20-22"></div>
-                
-                <!-- Freitag -->
-                <div class="day-header">Freitag</div>
-                <div class="time-header">08:00-10:00</div>
-                <div class="time-header">10:00-12:00</div>
-                <div class="time-header">12:00-14:00</div>
-                <div class="time-header">14:00-16:00</div>
-                <div class="time-header">16:00-18:00</div>
-                <div class="time-header">18:00-20:00</div>
-                <div class="time-header">20:00-22:00</div>
-                
-                <div class="time-slot" data-day="fri" data-time="8-10"></div>
-                <div class="time-slot" data-day="fri" data-time="10-12"></div>
-                <div class="time-slot" data-day="fri" data-time="12-14"></div>
-                <div class="time-slot" data-day="fri" data-time="14-16"></div>
-                <div class="time-slot" data-day="fri" data-time="16-18"></div>
-                <div class="time-slot" data-day="fri" data-time="18-20"></div>
-                <div class="time-slot" data-day="fri" data-time="20-22"></div>
-                
-                <!-- Samstag -->
-                <div class="day-header">Samstag</div>
-                <div class="time-header">08:00-10:00</div>
-                <div class="time-header">10:00-12:00</div>
-                <div class="time-header">12:00-14:00</div>
-                <div class="time-header">14:00-16:00</div>
-                <div class="time-header">16:00-18:00</div>
-                <div class="time-header">18:00-20:00</div>
-                <div class="time-header">20:00-22:00</div>
-                
-                <div class="time-slot" data-day="sat" data-time="8-10"></div>
-                <div class="time-slot" data-day="sat" data-time="10-12"></div>
-                <div class="time-slot" data-day="sat" data-time="12-14"></div>
-                <div class="time-slot" data-day="sat" data-time="14-16"></div>
-                <div class="time-slot" data-day="sat" data-time="16-18"></div>
-                <div class="time-slot" data-day="sat" data-time="18-20"></div>
-                <div class="time-slot" data-day="sat" data-time="20-22"></div>
-                
-                <!-- Sonntag -->
-                <div class="day-header">Sonntag</div>
-                <div class="time-header">08:00-10:00</div>
-                <div class="time-header">10:00-12:00</div>
-                <div class="time-header">12:00-14:00</div>
-                <div class="time-header">14:00-16:00</div>
-                <div class="time-header">16:00-18:00</div>
-                <div class="time-header">18:00-20:00</div>
-                <div class="time-header">20:00-22:00</div>
-                
-                <div class="time-slot" data-day="sun" data-time="8-10"></div>
-                <div class="time-slot" data-day="sun" data-time="10-12"></div>
-                <div class="time-slot" data-day="sun" data-time="12-14"></div>
-                <div class="time-slot" data-day="sun" data-time="14-16"></div>
-                <div class="time-slot" data-day="sun" data-time="16-18"></div>
-                <div class="time-slot" data-day="sun" data-time="18-20"></div>
-                <div class="time-slot" data-day="sun" data-time="20-22"></div>
-            </div>
-            
-            <div class="button-group">
-                <button type="button" class="print-btn" id="printBtn">VerfÃ¼gbarkeit drucken</button>
-                <button type="button" class="whatsapp-btn" id="whatsappBtn">An Admin senden (WhatsApp)</button>
-            </div>
-        </form>
+  <div class="container">
+    <h1>IRIS Language Academy – Verfügbarkeit melden</h1>
+    <div class="instructions">
+      <h2>Liebe Lehrkräfte,</h2>
+      <p>Vielen Dank, dass Sie Ihre Verfügbarkeit für den Unterricht eintragen. Bitte beachten Sie:</p>
+      <ul>
+        <li>Tragen Sie bitte Ihren vollständigen Namen, Ihre Kontaktdaten und das heutige Datum ein.</li>
+        <li>Wählen Sie alle Zeiten aus, in denen Sie grundsätzlich verfügbar sind.</li>
+        <li>Planen Sie Pausen und Vorbereitungszeit ein.</li>
+      </ul>
+      <p><strong>Mehr verfügbare Zeiten erhöhen Ihre Chancen auf Unterrichtsstunden!</strong></p>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set today's date as default
-            const today = new Date();
-            const dateString = today.toISOString().split('T')[0];
-            document.getElementById('submissionDate').value = dateString;
-            
-            // Time slot selection
-            const timeSlots = document.querySelectorAll('.time-slot');
-            timeSlots.forEach(slot => {
-                slot.addEventListener('click', function() {
-                    this.classList.toggle('selected');
-                });
-            });
-            
-            // Print functionality
-            document.getElementById('printBtn').addEventListener('click', function() {
-                // First validate form
-                const fullName = document.getElementById('fullName').value;
-                const email = document.getElementById('email').value;
-                const submissionDate = document.getElementById('submissionDate').value;
-                
-                if (!fullName || !email || !submissionDate) {
-                    alert('Bitte fÃ¼llen Sie alle Felder aus (Name, E-Mail und Datum)');
-                    return;
-                }
-                
-                const selectedSlots = document.querySelectorAll('.time-slot.selected');
-                if (selectedSlots.length === 0) {
-                    alert('Bitte wÃ¤hlen Sie mindestens eine verfÃ¼gbare Zeit aus');
-                    return;
-                }
-                
-                // Format date for display
-                const formattedDate = new Date(submissionDate).toLocaleDateString('de-DE', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                
-                // Add teacher info to print
-                const printContent = `
-                    <h1>IRIS Language Academy - VerfÃ¼gbarkeit</h1>
-                    <h2>Lehrkraft: ${fullName}</h2>
-                    <p>E-Mail: ${email}</p>
-                    <p>Formular ausgefÃ¼llt am: ${formattedDate}</p>
-                    <h3>VerfÃ¼gbarkeit:</h3>
-                    ${getAvailabilityText()}
-                    <p>Dokument erstellt am: ${new Date().toLocaleDateString('de-DE')}</p>
-                `;
-                
-                const originalContent = document.body.innerHTML;
-                document.body.innerHTML = printContent;
-                window.print();
-                document.body.innerHTML = originalContent;
-            });
-            
-            // WhatsApp functionality
-            document.getElementById('whatsappBtn').addEventListener('click', function() {
-                // First validate form
-                const fullName = document.getElementById('fullName').value;
-                const email = document.getElementById('email').value;
-                const submissionDate = document.getElementById('submissionDate').value;
-                
-                if (!fullName || !email || !submissionDate) {
-                    alert('Bitte fÃ¼llen Sie alle Felder aus (Name, E-Mail und Datum)');
-                    return;
-                }
-                
-                const selectedSlots = document.querySelectorAll('.time-slot.selected');
-                if (selectedSlots.length === 0) {
-                    alert('Bitte wÃ¤hlen Sie mindestens eine verfÃ¼gbare Zeit aus');
-                    return;
-                }
-                
-                // Format date for display
-                const formattedDate = new Date(submissionDate).toLocaleDateString('de-DE', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                
-                const message = `IRIS VerfÃ¼gbarkeit - ${fullName}\n\nE-Mail: ${email}\n\nDatum der Angabe: ${formattedDate}\n\nVerfÃ¼gbarkeit:\n${getAvailabilityText()}`;
-                const encodedMessage = encodeURIComponent(message);
-                const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
-                
-                window.open(whatsappUrl, '_blank');
-            });
-            
-            // Helper function to get availability as text
-            function getAvailabilityText() {
-                const days = {
-                    'mon': 'Montag',
-                    'tue': 'Dienstag',
-                    'wed': 'Mittwoch',
-                    'thu': 'Donnerstag',
-                    'fri': 'Freitag',
-                    'sat': 'Samstag',
-                    'sun': 'Sonntag'
-                };
-                
-                const availabilityByDay = {};
-                
-                // Group selected slots by day
-                document.querySelectorAll('.time-slot.selected').forEach(slot => {
-                    const day = slot.getAttribute('data-day');
-                    const time = slot.getAttribute('data-time');
-                    
-                    if (!availabilityByDay[day]) {
-                        availabilityByDay[day] = [];
-                    }
-                    
-                    availabilityByDay[day].push(time.replace('-', ':00-') + ':00');
-                });
-                
-                // Build text output
-                let output = '';
-                
-                for (const [dayCode, times] of Object.entries(availabilityByDay)) {
-                    output += `â€¢ ${days[dayCode]}: ${times.join(', ')}\n`;
-                }
-                
-                return output;
-            }
+    <form id="availabilityForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fullName">Vollständiger Name:</label>
+          <input type="text" id="fullName" required />
+        </div>
+        <div class="form-group">
+          <label for="email">E-Mail:</label>
+          <input type="email" id="email" required />
+        </div>
+        <div class="form-group">
+          <label for="submissionDate">Datum der Angabe:</label>
+          <input type="date" id="submissionDate" required />
+        </div>
+      </div>
+
+      <h2>Ihre Verfügbarkeit</h2>
+      <p>Bitte wählen Sie alle Zeiten aus, in denen Sie verfügbar sind:</p>
+
+      <div class="availability-grid" id="availabilityGrid"></div>
+
+      <div class="button-group">
+        <button type="button" class="print-btn" id="printBtn">Verfügbarkeit drucken</button>
+        <button type="button" class="whatsapp-btn" id="whatsappBtn">An Admin senden (WhatsApp)</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const grid = document.getElementById('availabilityGrid');
+      const days = [
+        { label: 'Montag', code: 'mon' },
+        { label: 'Dienstag', code: 'tue' },
+        { label: 'Mittwoch', code: 'wed' },
+        { label: 'Donnerstag', code: 'thu' },
+        { label: 'Freitag', code: 'fri' },
+        { label: 'Samstag', code: 'sat' },
+        { label: 'Sonntag', code: 'sun' }
+      ];
+      const times = [
+        '08:00–10:00', '10:00–12:00', '12:00–14:00',
+        '14:00–16:00', '16:00–18:00', '18:00–20:00', '20:00–22:00'
+      ];
+
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('submissionDate').value = today;
+
+      days.forEach(day => {
+        const header = document.createElement('div');
+        header.className = 'day-header';
+        header.textContent = day.label;
+        grid.appendChild(header);
+
+        times.forEach((time, i) => {
+          if (day === days[0]) {
+            const th = document.createElement('div');
+            th.className = 'time-header';
+            th.textContent = time;
+            grid.appendChild(th);
+          }
         });
-    </script>
+
+        times.forEach((time, i) => {
+          const slot = document.createElement('div');
+          slot.className = 'time-slot';
+          slot.dataset.day = day.code;
+          slot.dataset.time = time;
+          grid.appendChild(slot);
+        });
+      });
+
+      grid.addEventListener('click', e => {
+        if (e.target.classList.contains('time-slot')) {
+          e.target.classList.toggle('selected');
+        }
+      });
+
+      document.getElementById('printBtn').addEventListener('click', () => {
+        if (!validateForm()) return;
+        window.print();
+      });
+
+      document.getElementById('whatsappBtn').addEventListener('click', () => {
+        if (!validateForm()) return;
+
+        const name = document.getElementById('fullName').value;
+        const email = document.getElementById('email').value;
+        const date = document.getElementById('submissionDate').value;
+        const slots = Array.from(document.querySelectorAll('.time-slot.selected')).map(slot =>
+          `${slot.dataset.day.toUpperCase()} ${slot.dataset.time}`
+        );
+
+        const message = `👋 Hallo Admin,%0Aich bin ${name} (%0A📧 ${email}) und gebe meine Verfügbarkeit an (${date}):%0A🕒 Zeiten:%0A- ${slots.join('%0A- ')}`;
+        const whatsappURL = `https://wa.me/?text=${message}`;
+
+        window.open(whatsappURL, '_blank');
+      });
+
+      function validateForm() {
+        const name = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const date = document.getElementById('submissionDate').value.trim();
+        const selected = document.querySelectorAll('.time-slot.selected');
+
+        if (!name || !email || !date) {
+          alert('Bitte füllen Sie alle Felder aus (Name, E-Mail, Datum).');
+          return false;
+        }
+        if (selected.length === 0) {
+          alert('Bitte wählen Sie mindestens eine verfügbare Zeit aus.');
+          return false;
+        }
+        return true;
+      }
+    });
+  </script>
 </body>
 </html>
